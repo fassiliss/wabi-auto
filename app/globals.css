@@ -1,0 +1,68 @@
+:root {
+    --background: #ffffff;
+    --foreground: #0f172a;
+}
+
+/* Basic reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+/* Make images responsive */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ------------------------- */
+/* HEADER STICKY BEHAVIOR    */
+/* ------------------------- */
+
+.header-area {
+    position: relative;
+    width: 100%;
+    z-index: 999;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Sticky when scrolling UP */
+.header-area.is-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    animation: slideDown 0.3s ease;
+}
+
+/* Hidden when scrolling DOWN */
+.header-area.is-hidden {
+    transform: translateY(-100%);
+}
+
+/* Slide down animation */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
