@@ -10,7 +10,7 @@ export async function PATCH(
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = await params; // ← await params in Next.js 16
+    const { id } = await params;
 
     const serviceRequest = await ServiceRequest.findByIdAndUpdate(
       id,
@@ -35,7 +35,7 @@ export async function DELETE(
 ) {
   try {
     await connectDB();
-    const { id } = await params; // ← await params in Next.js 16
+    const { id } = await params;
 
     const serviceRequest = await ServiceRequest.findByIdAndDelete(id);
 
