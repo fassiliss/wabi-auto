@@ -50,63 +50,63 @@ export default function Hero() {
                                     </div>
                                 </div>
 
-                                <div className="te-slider-column">
-                                    <div className="te-slider-image">
-                                        <div className="slider-feature">
-                                            <div className="single-slider-feature">
-                                                <div className="slider-feature-content">
-                                                    <h3 className="title">20K</h3>
-                                                    <p className="sub-title">Satisfied Clients</p>
-                                                </div>
-                                                <div className="slider-feature-img">
-                                                    <img
-                                                        src="/images/slider/feature-icon-1.png"
-                                                        alt="icon"
-                                                    />
-                                                </div>
-                                            </div>
+                                {/*<div className="te-slider-column">*/}
+                                {/*    <div className="te-slider-image">*/}
+                                {/*        <div className="slider-feature">*/}
+                                {/*            <div className="single-slider-feature">*/}
+                                {/*                <div className="slider-feature-content">*/}
+                                {/*                    <h3 className="title">20K</h3>*/}
+                                {/*                    <p className="sub-title">Satisfied Clients</p>*/}
+                                {/*                </div>*/}
+                                {/*                <div className="slider-feature-img">*/}
+                                {/*                    <img*/}
+                                {/*                        src="/images/slider/feature-icon-1.png"*/}
+                                {/*                        alt="icon"*/}
+                                {/*                    />*/}
+                                {/*                </div>*/}
+                                {/*            </div>*/}
 
-                                            <div className="single-slider-feature">
-                                                <div className="slider-feature-content">
-                                                    <h3 className="title">400</h3>
-                                                    <p className="sub-title">Team Member</p>
-                                                </div>
-                                                <div className="slider-feature-img">
-                                                    <img
-                                                        src="/images/slider/feature-icon-2.png"
-                                                        alt="icon"
-                                                    />
-                                                </div>
-                                            </div>
+                                {/*            <div className="single-slider-feature">*/}
+                                {/*                <div className="slider-feature-content">*/}
+                                {/*                    <h3 className="title">400</h3>*/}
+                                {/*                    <p className="sub-title">Team Member</p>*/}
+                                {/*                </div>*/}
+                                {/*                <div className="slider-feature-img">*/}
+                                {/*                    <img*/}
+                                {/*                        src="/images/slider/feature-icon-2.png"*/}
+                                {/*                        alt="icon"*/}
+                                {/*                    />*/}
+                                {/*                </div>*/}
+                                {/*            </div>*/}
 
-                                            <div className="single-slider-feature">
-                                                <div className="slider-feature-content">
-                                                    <h3 className="title">150</h3>
-                                                    <p className="sub-title">Winning Award</p>
-                                                </div>
-                                                <div className="slider-feature-img">
-                                                    <img
-                                                        src="/images/slider/feature-icon-3.png"
-                                                        alt="icon"
-                                                    />
-                                                </div>
-                                            </div>
+                                {/*            <div className="single-slider-feature">*/}
+                                {/*                <div className="slider-feature-content">*/}
+                                {/*                    <h3 className="title">150</h3>*/}
+                                {/*                    <p className="sub-title">Winning Award</p>*/}
+                                {/*                </div>*/}
+                                {/*                <div className="slider-feature-img">*/}
+                                {/*                    <img*/}
+                                {/*                        src="/images/slider/feature-icon-3.png"*/}
+                                {/*                        alt="icon"*/}
+                                {/*                    />*/}
+                                {/*                </div>*/}
+                                {/*            </div>*/}
 
-                                            <div className="single-slider-feature">
-                                                <div className="slider-feature-content">
-                                                    <h3 className="title">7K</h3>
-                                                    <p className="sub-title">Clients Review</p>
-                                                </div>
-                                                <div className="slider-feature-img">
-                                                    <img
-                                                        src="/images/slider/feature-icon-4.png"
-                                                        alt="icon"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {/*            <div className="single-slider-feature">*/}
+                                {/*                <div className="slider-feature-content">*/}
+                                {/*                    <h3 className="title">7K</h3>*/}
+                                {/*                    <p className="sub-title">Clients Review</p>*/}
+                                {/*                </div>*/}
+                                {/*                <div className="slider-feature-img">*/}
+                                {/*                    <img*/}
+                                {/*                        src="/images/slider/feature-icon-4.png"*/}
+                                {/*                        alt="icon"*/}
+                                {/*                    />*/}
+                                {/*                </div>*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                                 {/* end right column */}
                             </div>
                         </div>

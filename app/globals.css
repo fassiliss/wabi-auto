@@ -1,6 +1,15 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
 :root {
     --background: #ffffff;
     --foreground: #0f172a;
+}
+
+.dark {
+    --background: #0a0a0a;
+    --foreground: #ededed;
 }
 
 /* Basic reset */
@@ -18,10 +27,10 @@ body {
 
 body {
     min-height: 100vh;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background-color: var(--background);
     color: var(--foreground);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Make images responsive */
@@ -52,6 +61,12 @@ img {
     animation: slideDown 0.3s ease;
 }
 
+/* Dark mode for sticky header */
+.dark .header-area.is-sticky {
+    background: #1a1a1a;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+}
+
 /* Hidden when scrolling DOWN */
 .header-area.is-hidden {
     transform: translateY(-100%);
@@ -65,4 +80,108 @@ img {
     to {
         transform: translateY(0);
     }
+}
+
+/* Dark mode for header elements */
+.dark .header-top {
+    background: #1a1a1a !important;
+}
+
+.dark .te-header-menu-area {
+    background: #1a1a1a !important;
+}
+
+.dark .te-main-menu ul li a {
+    color: #e5e5e5 !important;
+}
+
+.dark .te-header-contact-info span,
+.dark .te-header-contact-info a {
+    color: #d1d1d1 !important;
+}
+
+/* Dark mode for footer */
+.dark .te-footer-area {
+    background-color: #0f0f0f !important;
+}
+
+.dark .te-footer-widget h4,
+.dark .te-footer-widget p,
+.dark .te-footer-list li a,
+.dark .te-footer-contact-list li {
+    color: #e5e5e5 !important;
+}
+
+.dark .te-footer-bottom {
+    border-top-color: #333 !important;
+}
+/* Dark mode for Hero/Slider section */
+.dark .te-slider-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.dark .te-slider-short-title {
+    color: #60a5fa !important;
+}
+
+.dark .te-slider-title {
+    color: #ffffff !important;
+}
+
+.dark .te-slider-short-desc {
+    color: #d1d5db !important;
+}
+
+.dark .single-slider-feature {
+    background: rgba(26, 26, 26, 0.9) !important;
+}
+
+.dark .single-slider-feature .title {
+    color: #ffffff !important;
+}
+
+.dark .single-slider-feature .sub-title {
+    color: #d1d5db !important;
+}
+
+.dark .te-theme-btn {
+    background: #2563eb !important;
+}
+
+.dark .te-call-btn .te-text {
+    color: #d1d5db !important;
+}
+/* Dark mode for Breadcrumb */
+.dark .te-breadcrumb-area {
+    background-color: #1a1a1a !important;
+}
+
+.dark .te-breadcrumb-title {
+    color: #ffffff !important;
+}
+
+.dark .te-breadcrumb-list li,
+.dark .te-breadcrumb-list li a {
+    color: #d1d5db !important;
+}
+
+.dark .te-breadcrumb-list li.active {
+    color: #60a5fa !important;
+}
+
+/* Dark mode for Service Cards */
+.dark .te-info-card {
+    background: #1f1f1f !important;
+}
+
+.dark .te-info-card .title a {
+    color: #ffffff !important;
+}
+
+.dark .te-info-card .desc {
+    color: #d1d5db !important;
+}
+
+.dark .te-py-120 {
+    background: #0a0a0a !important;
 }

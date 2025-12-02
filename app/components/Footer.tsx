@@ -90,6 +90,9 @@ export default function Footer() {
                         <a href="/privacy-policy">Privacy Policy</a> &nbsp; | &nbsp;
                         <a href="/terms">Terms & Conditions</a> &nbsp; | &nbsp;
                         <a href="/support">Support</a>
+                        <br />
+                        <br />
+                        Developed by <a href="https://www.fassiltsegaye.com" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>www.fassiltsegaye.com</a>
                     </p>
                 </div>
             </div>
