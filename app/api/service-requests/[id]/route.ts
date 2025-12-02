@@ -5,12 +5,12 @@ import ServiceRequest from '@/models/ServiceRequest';
 // PATCH - Update service request status
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = params;
+    const { id } = await params; // ← await params in Next.js 16
 
     const serviceRequest = await ServiceRequest.findByIdAndUpdate(
       id,
@@ -31,11 +31,11 @@ export async function PATCH(
 // DELETE - Delete service request
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params; // ← await params in Next.js 16
 
     const serviceRequest = await ServiceRequest.findByIdAndDelete(id);
 
