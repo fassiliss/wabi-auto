@@ -8,7 +8,6 @@ export default function Header() {
     const [isSticky, setIsSticky] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
 
-
     useEffect(() => {
         const handleScroll = () => {
             const current = window.scrollY;
@@ -26,6 +25,7 @@ export default function Header() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
     const headerClassName = [
         "header-area",
         "style-1",
@@ -73,7 +73,7 @@ export default function Header() {
                                             </div>
                                         </div>
 
-                                        {/* Right side – social icons + THEME TOGGLE */}
+                                        {/* Right side – social icons + ADMIN + THEME TOGGLE */}
                                         <div className="header-top-info">
                                             <div className="te-social-profile" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                                 <Link href="#">
@@ -88,7 +88,30 @@ export default function Header() {
                                                 <Link href="#">
                                                     <i className="fa-brands fa-youtube"></i>
                                                 </Link>
-                                                {/* ADD THEME TOGGLE HERE */}
+
+                                                {/* ADMIN BUTTON - Icon Only */}
+                                                <Link
+                                                    href="/admin"
+                                                    style={{
+                                                        width: '32px',
+                                                        height: '32px',
+                                                        background: '#667eea',
+                                                        color: 'white',
+                                                        borderRadius: '50%',
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        transition: 'all 0.3s ease',
+                                                        textDecoration: 'none',
+                                                        marginLeft: '5px',
+                                                    }}
+                                                    className="admin-icon-btn"
+                                                    title="Admin Dashboard"
+                                                >
+                                                    <i className="fa-solid fa-lock" style={{ fontSize: '14px' }}></i>
+                                                </Link>
+
+                                                {/* THEME TOGGLE */}
                                                 <ThemeToggle />
                                             </div>
                                         </div>

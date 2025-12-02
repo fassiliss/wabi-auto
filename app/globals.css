@@ -185,3 +185,16 @@ img {
 .dark .te-py-120 {
     background: #0a0a0a !important;
 }
+/* Admin button hover effect */
+.admin-btn-header:hover {
+    background: #5568d3 !important;
+    transform: scale(1.1);
+}
+
+.dark .admin-btn-header {
+    background: #7c3aed !important;
+}
+
+.dark .admin-btn-header:hover {
+    background: #6d28d9 !important;
+}
