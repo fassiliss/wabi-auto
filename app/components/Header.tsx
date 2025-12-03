@@ -32,9 +32,9 @@ export default function Header() {
                 <span>
                   <i className="fa-solid fa-location-dot"></i> 6391 Elgin Rt.Mirpur, 10299
                 </span>
-                {/*<span>*/}
-                {/*  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm*/}
-                {/*</span>*/}
+                <span>
+                  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm
+                </span>
               </div>
             </div>
             <div className="col-lg-6 col-md-6">
@@ -90,7 +90,19 @@ export default function Header() {
                 <ul>
                   <li><a href="/">Home</a></li>
                   <li><a href="/about">About Us</a></li>
-                  <li><a href="/services">Services</a></li>
+                  
+                  {/* Services Dropdown with Anchor Links */}
+                  <li className="has-submenu">
+                    <a href="/services">Services</a>
+                    <ul className="submenu">
+                      <li><a href="/services#engine-diagnostics">Engine Diagnostics</a></li>
+                      <li><a href="/services#suspension-tuning">Suspension Tuning</a></li>
+                      <li><a href="/services#transmission-service">Transmission Service</a></li>
+                      <li><a href="/services#oil-change">Oil Change</a></li>
+                      <li><a href="/services#brake-repair">Brake Repair</a></li>
+                    </ul>
+                  </li>
+                  
                   <li><a href="/blog">Blog</a></li>
                   <li><a href="/testimonials">Testimonials</a></li>
                   <li><a href="/booking" style={{ color: '#2563eb', fontWeight: '600' }}>Book Service</a></li>
