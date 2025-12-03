@@ -1,231 +1,131 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import ThemeToggle from "./ThemeToggle";
+'use client';
+import { useEffect, useState } from 'react';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
-    const [isSticky, setIsSticky] = useState(false);
-    const [isVisible, setIsVisible] = useState(true);
+  const [isSticky, setIsSticky] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const current = window.scrollY;
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 100);
+    };
 
-            // Make header sticky after scrolling 100px
-            if (current > 100) {
-                setIsSticky(true);
-                setIsVisible(true);
-            } else {
-                setIsSticky(false);
-                setIsVisible(true);
-            }
-        };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    const headerClassName = [
-        "header-area",
-        "style-1",
-        isSticky ? "is-sticky" : "",
-        !isVisible ? "is-hidden" : "",
-    ]
-        .join(" ")
-        .trim();
-
-    return (
-        <header className={headerClassName}>
-            <div className="header-area-wrapper">
-                <div className="logo-wrapper d-flex align-items-center">
-                    <div className="te-logo">
-                        <Link href="/" className="te-standard-logo">
-                            <img src="/images/logo/logo-white.png" alt="logo" />
-                        </Link>
-                    </div>
-                </div>
-
-                <div className="header-inner">
-                    {/* ========== HEADER TOP BAR ========== */}
-                    <div className="header-top">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-12">
-                                    <div className="te-header-top-wrapper">
-                                        {/* Left side – contact info */}
-                                        <div className="header-top-info">
-                                            <div className="te-header-contact-info">
-                                                <span>
-                                                    <a href="mailto:info@example.com">
-                                                        <i className="fa-solid fa-envelope"></i>
-                                                        info@example.com
-                                                    </a>
-                                                </span>
-                                                <span>
-                                                    <i className="fa-solid fa-location-dot"></i>
-                                                    6391 Elgin Rt.Mirpur, 10299
-                                                </span>
-                                                <span>
-                                                    <i className="fa-solid fa-clock"></i>
-                                                    Sunday - Friday: 9 am - 8 pm
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Right side – social icons + ADMIN + THEME TOGGLE */}
-                                        <div className="header-top-info">
-                                            <div className="te-social-profile" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                <Link href="#">
-                                                    <i className="fa-brands fa-facebook-f"></i>
-                                                </Link>
-                                                <Link href="#">
-                                                    <i className="fa-brands fa-twitter"></i>
-                                                </Link>
-                                                <Link href="#">
-                                                    <i className="fa-brands fa-linkedin-in"></i>
-                                                </Link>
-                                                <Link href="#">
-                                                    <i className="fa-brands fa-youtube"></i>
-                                                </Link>
-
-                                                {/* ADMIN BUTTON - Icon Only */}
-                                                <Link
-                                                    href="/admin"
-                                                    style={{
-                                                        width: '32px',
-                                                        height: '32px',
-                                                        background: '#667eea',
-                                                        color: 'white',
-                                                        borderRadius: '50%',
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        transition: 'all 0.3s ease',
-                                                        textDecoration: 'none',
-                                                        marginLeft: '5px',
-                                                    }}
-                                                    className="admin-icon-btn"
-                                                    title="Admin Dashboard"
-                                                >
-                                                    <i className="fa-solid fa-lock" style={{ fontSize: '14px' }}></i>
-                                                </Link>
-
-                                                {/* THEME TOGGLE */}
-                                                <ThemeToggle />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* ========== MAIN NAV / STICKY HEADER ========== */}
-                    <div className="te-header-menu-area te-sticky-header">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-12 d-flex align-items-center justify-content-end">
-                                    <div className="te-logo-wrapper">
-                                        <div className="te-logo">
-                                            <Link href="/" className="te-sticky-logo">
-                                                <img src="/images/logo/logo.png" alt="logo" />
-                                            </Link>
-                                            <Link href="/" className="te-retina-logo">
-                                                <img src="/images/logo/logo.png" alt="logo" />
-                                            </Link>
-                                        </div>
-                                    </div>
-
-                                    <div className="te-menu d-inline-block">
-                                        <nav id="main-menu" className="te-main-menu">
-                                            <ul>
-                                                <li className="">
-                                                    <Link href="/">Home</Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/about">About Us</Link>
-                                                </li>
-                                                <li className="te-dropdown menu-item-has-children">
-                                                    <Link href="/services">Services</Link>
-                                                    <ul className="sub-menu">
-                                                        <li>
-                                                            <Link href="/services">All Services</Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link href="/services/engine-diagnostics">
-                                                                Engine Diagnostics
-                                                            </Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link href="/services/suspension-tuning">
-                                                                Suspension Tuning
-                                                            </Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link href="/services/transmission-service">
-                                                                Transmission Service
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li className="te-dropdown menu-item-has-children">
-                                                    <Link href="/projects">Projects</Link>
-                                                    <ul className="sub-menu">
-                                                        <li>
-                                                            <Link href="/projects">Projects Grid</Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link href="/projects/premium-car-polishing">
-                                                                Project Details
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li className="te-dropdown menu-item-has-children">
-                                                    <Link href="/blog">Blog</Link>
-                                                    <ul className="sub-menu">
-                                                        <li>
-                                                            <Link href="/blog">Blog List</Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link href="/blog/sample-post">
-                                                                Blog Details
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li className="te-dropdown menu-item-has-children">
-                                                    <Link href="/team">Team</Link>
-                                                    <ul className="sub-menu">
-                                                        <li>
-                                                            <Link href="/team">Our Team</Link>
-                                                        </li>
-                                                        <li>
-                                                            <Link href="/team/lead-technician">
-                                                                Team Details
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <Link href="/contact">Contact</Link>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-
-                                    <div className="te-mobile-menu-bar d-lg-none text-end">
-                                        <a href="#" className="te-mobile-menu-toggle-btn">
-                                            <i className="fal fa-bars"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <header className={`header-area ${isSticky ? 'is-sticky' : ''}`}>
+      {/* Header Top */}
+      <div className="header-top">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-6 col-md-6">
+              <div className="te-header-contact-info">
+                <span>
+                  <i className="fa-solid fa-envelope"></i> info@example.com
+                </span>
+                <span>
+                  <i className="fa-solid fa-location-dot"></i> 6391 Elgin Rt.Mirpur, 10299
+                </span>
+                <span>
+                  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm
+                </span>
+              </div>
             </div>
-        </header>
-    );
+            <div className="col-lg-6 col-md-6">
+              <div className="te-header-social" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '15px' }}>
+                <a href="#" aria-label="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i className="fa-brands fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i className="fa-brands fa-linkedin-in"></i></a>
+                <a href="#" aria-label="YouTube"><i className="fa-brands fa-youtube"></i></a>
+                
+                {/* Admin Button */}
+                <a 
+                  href="/admin"
+                  className="admin-icon-btn"
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    background: '#667eea',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease',
+                    marginLeft: '5px',
+                  }}
+                  title="Admin Dashboard"
+                >
+                  <i className="fa-solid fa-lock" style={{ fontSize: '14px' }}></i>
+                </a>
+
+                {/* Theme Toggle */}
+                <ThemeToggle />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Header Menu */}
+      <div className="te-header-menu-area">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-2 col-6">
+              <div className="te-site-logo">
+                <a href="/">
+                  <h2 style={{ margin: 0, color: '#ff4646', fontWeight: 'bold' }}>
+                    <i className="fa-solid fa-car" style={{ marginRight: '10px' }}></i>
+                    Automec
+                  </h2>
+                </a>
+              </div>
+            </div>
+            <div className="col-lg-10 col-6">
+              <nav className="te-main-menu">
+                <ul>
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about">About Us</a></li>
+                  <li className="has-submenu">
+                    <a href="/services">Services</a>
+                    <ul className="submenu">
+                      <li><a href="/services">All Services</a></li>
+                      <li><a href="/services">Engine Diagnostics</a></li>
+                      <li><a href="/services">Suspension Tuning</a></li>
+                      <li><a href="/services">Transmission Service</a></li>
+                    </ul>
+                  </li>
+                  <li className="has-submenu">
+                    <a href="/projects">Projects</a>
+                    <ul className="submenu">
+                      <li><a href="/projects">All Projects</a></li>
+                      <li><a href="/projects">Recent Work</a></li>
+                    </ul>
+                  </li>
+                  <li className="has-submenu">
+                    <a href="/blog">Blog</a>
+                    <ul className="submenu">
+                      <li><a href="/blog">All Posts</a></li>
+                      <li><a href="/blog">Auto News</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="/testimonials">Testimonials</a></li>
+                  <li className="has-submenu">
+                    <a href="/team">Team</a>
+                    <ul className="submenu">
+                      <li><a href="/team">Our Team</a></li>
+                      <li><a href="/team">Careers</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="/contact">Contact</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }
