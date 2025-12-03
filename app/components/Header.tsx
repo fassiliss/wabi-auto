@@ -32,9 +32,9 @@ export default function Header() {
                 <span>
                   <i className="fa-solid fa-location-dot"></i> 6391 Elgin Rt.Mirpur, 10299
                 </span>
-                <span>
-                  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm
-                </span>
+                {/*<span>*/}
+                {/*  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm*/}
+                {/*</span>*/}
               </div>
             </div>
             <div className="col-lg-6 col-md-6">
