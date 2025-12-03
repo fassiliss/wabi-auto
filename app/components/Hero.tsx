@@ -7,7 +7,7 @@ export default function Hero() {
                 <div className="te-single-slider-wrapper">
                     <div
                         className="te-single-slider"
-                        style={{ backgroundImage: "url('/images/slider/slider-1.png')" }}
+                        style={{ backgroundImage: "url('/images/slider/wabi2.png')" }}
                     >
                         <div className="te-slider-overlay"></div>
 

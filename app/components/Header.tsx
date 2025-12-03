@@ -28,9 +28,9 @@ export default function Header() {
                 <span>
                   <i className="fa-solid fa-location-dot"></i> 6391 Elgin Rt.Mirpur, 10299
                 </span>
-                <span>
-                  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm
-                </span>
+                {/*<span>*/}
+                {/*  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm*/}
+                {/*</span>*/}
               </div>
             </div>
             <div className="col-lg-6 col-md-6">
@@ -78,7 +78,7 @@ export default function Header() {
                 <a href="/">
                   <h2 style={{ margin: 0, color: '#ff4646', fontWeight: 'bold' }}>
                     <i className="fa-solid fa-car" style={{ marginRight: '10px' }}></i>
-                    Automec
+                    Wabi Auto
                   </h2>
                 </a>
               </div>
