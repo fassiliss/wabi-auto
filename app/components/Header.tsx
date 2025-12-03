@@ -21,7 +21,6 @@ export default function Header() {
 
   return (
     <header className={`header-area ${isSticky ? 'is-sticky' : ''}`}>
-      {/* Header Top - Hidden on mobile */}
       <div className="header-top" style={{ display: 'none' }}>
         <div className="container">
           <div className="row align-items-center">
@@ -72,7 +71,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Header Menu */}
       <div className="te-header-menu-area">
         <div className="container">
           <div className="row align-items-center">
@@ -88,7 +86,6 @@ export default function Header() {
             </div>
             
             <div className="col-6 col-lg-10">
-              {/* Desktop Menu */}
               <nav className="te-main-menu desktop-menu">
                 <ul>
                   <li><a href="/">Home</a></li>
@@ -96,11 +93,11 @@ export default function Header() {
                   <li><a href="/services">Services</a></li>
                   <li><a href="/blog">Blog</a></li>
                   <li><a href="/testimonials">Testimonials</a></li>
+                  <li><a href="/booking" style={{ color: '#2563eb', fontWeight: '600' }}>Book Service</a></li>
                   <li><a href="/contact">Contact</a></li>
                 </ul>
               </nav>
 
-              {/* Mobile Menu Toggle */}
               <div className="mobile-menu-toggle">
                 <ThemeToggle />
                 <button 
@@ -123,7 +120,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
           <div className="mobile-menu-dropdown">
             <nav>
@@ -133,6 +129,7 @@ export default function Header() {
                 <li><a href="/services" onClick={toggleMobileMenu}>Services</a></li>
                 <li><a href="/blog" onClick={toggleMobileMenu}>Blog</a></li>
                 <li><a href="/testimonials" onClick={toggleMobileMenu}>Testimonials</a></li>
+                <li><a href="/booking" onClick={toggleMobileMenu}><i className="fa-solid fa-calendar"></i> Book Service</a></li>
                 <li><a href="/contact" onClick={toggleMobileMenu}>Contact</a></li>
                 <li><a href="/admin" onClick={toggleMobileMenu}><i className="fa-solid fa-lock"></i> Admin</a></li>
               </ul>
@@ -142,7 +139,6 @@ export default function Header() {
       </div>
 
       <style jsx>{`
-        /* Desktop menu - hidden on mobile */
         .desktop-menu {
           display: none;
         }
@@ -161,7 +157,6 @@ export default function Header() {
           }
         }
 
-        /* Mobile menu toggle */
         .mobile-menu-toggle {
           display: flex;
           align-items: center;
@@ -172,7 +167,6 @@ export default function Header() {
           color: #ffffff;
         }
 
-        /* Mobile dropdown menu */
         .mobile-menu-dropdown {
           position: absolute;
           top: 100%;
