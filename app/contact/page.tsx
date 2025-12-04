@@ -50,7 +50,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <PageBanner 
+      <div style={{ marginTop: '140px' }}><PageBanner 
         title="Contact Us"
         breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -72,7 +72,7 @@ export default function ContactPage() {
                   </div>
                   <div className="content">
                     <h5>Address</h5>
-                    <p>6391 Elgin St. Celina, Delaware 10299</p>
+                    <p>2401 Dickerson Pike, Nashville, Tn , 37207</p>
                   </div>
                 </div>
 
@@ -82,7 +82,7 @@ export default function ContactPage() {
                   </div>
                   <div className="content">
                     <h5>Phone</h5>
-                    <p>(307) 555-0133</p>
+                    <p>(615) 582-3291</p>
                   </div>
                 </div>
 
@@ -217,7 +217,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <Footer />
+      </div><Footer />
 
       <style jsx>{`
         .contact-info-wrapper {

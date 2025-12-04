@@ -43,7 +43,7 @@ export default function BlogPage() {
 
   return (
     <>
-      <PageBanner 
+      <div style={{ marginTop: '140px' }}><PageBanner 
         title="Our Blog"
         breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -130,7 +130,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      <Footer />
+      </div><Footer />
 
       <style jsx>{`
         .blog-card {

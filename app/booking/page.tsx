@@ -127,7 +127,7 @@ export default function BookingPage() {
 
   return (
     <>
-      <PageBanner 
+      <div style={{ marginTop: '140px' }}><PageBanner 
         title="Book Your Service"
         breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -381,7 +381,7 @@ export default function BookingPage() {
         </div>
       </section>
 
-      <Footer />
+      </div><Footer />
     </>
   );
 }

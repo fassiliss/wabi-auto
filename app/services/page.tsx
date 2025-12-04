@@ -73,7 +73,7 @@ export default function ServicesPage() {
 
   return (
     <>
-      <PageBanner 
+      <div style={{ marginTop: '140px' }}><PageBanner 
         title="Our Services"
         breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -146,7 +146,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <Footer />
+      </div><Footer />
 
       <style jsx>{`
         .service-card {

@@ -13,10 +13,10 @@ export default function AdminLogin() {
     setLoading(true);
     setError('');
 
-    // Simple password check (you can change this password)
+    // Simple password check
     if (password === 'admin123') {
       localStorage.setItem('adminAuth', 'true');
-      router.push('/admin');
+      router.push('/admin/dashboard');  // ✅ Fixed: redirect to dashboard
     } else {
       setError('Incorrect password');
       setLoading(false);
@@ -30,6 +30,7 @@ export default function AdminLogin() {
       alignItems: 'center',
       justifyContent: 'center',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      paddingTop: '80px',
     }}>
       <div style={{
         background: 'white',

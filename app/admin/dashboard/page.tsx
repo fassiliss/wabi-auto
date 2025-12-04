@@ -106,9 +106,9 @@ export default function AdminDashboard() {
 
   return (
     <>
-      {/* Banner Section */}
+      {/* Banner Section - Pushed BELOW header */}
       <div style={{
-        marginTop: '80px',
+        marginTop: '140px', // ✅ This pushes the banner DOWN below the header
         background: 'linear-gradient(rgba(102, 126, 234, 0.75), rgba(118, 75, 162, 0.75)), url(/images/booking-banner.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -145,14 +145,6 @@ export default function AdminDashboard() {
               fontSize: '16px',
               boxShadow: '0 4px 12px rgba(239, 68, 68, 0.4)',
               transition: 'all 0.3s ease',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = '#dc2626';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = '#ef4444';
-              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
             Logout

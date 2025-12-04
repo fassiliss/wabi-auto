@@ -54,7 +54,7 @@ export default function TestimonialsPage() {
 
   return (
     <>
-      <PageBanner 
+      <div style={{ marginTop: '140px' }}><PageBanner 
         title="Customer Testimonials"
         breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -217,7 +217,7 @@ export default function TestimonialsPage() {
         </div>
       </section>
 
-      <Footer />
+      </div><Footer />
 
         <style jsx>{`
             .dark h1, .dark h2, .dark h3, .dark h4 {

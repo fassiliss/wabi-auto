@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 export default function AboutPage() {
   return (
     <>
-      <PageBanner 
+      <div style={{ marginTop: '140px' }}><PageBanner 
         title="About Wabi Automotive"
         breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -31,7 +31,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Footer />
+      </div><Footer />
 
       <style jsx>{`
         .dark h2 {
