@@ -126,7 +126,7 @@ export default function AdminBookings() {
             <p style={{ margin: '5px 0 0', color: '#666' }}>Manage appointments and check-ins</p>
           </div>
           <Link 
-            href="/admin/dashboard"
+            href="/admin"
             style={{
               padding: '10px 20px',
               background: '#6b7280',

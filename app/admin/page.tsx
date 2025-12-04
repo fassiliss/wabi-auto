@@ -16,7 +16,7 @@ export default function AdminLogin() {
     // Simple password check (you can change this password)
     if (password === 'admin123') {
       localStorage.setItem('adminAuth', 'true');
-      router.push('/admin/dashboard');
+      router.push('/admin');
     } else {
       setError('Incorrect password');
       setLoading(false);

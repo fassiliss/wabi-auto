@@ -132,7 +132,7 @@ export default function AdminTestimonials() {
               + Add Testimonial
             </Link>
             <Link 
-              href="/admin/dashboard"
+              href="/admin"
               style={{
                 padding: '10px 20px',
                 background: '#6b7280',
