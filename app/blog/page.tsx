@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import PageBanner from '../components/PageBanner';
 import Footer from '../components/Footer';
 
 interface BlogPost {
@@ -42,25 +43,13 @@ export default function BlogPage() {
 
   return (
     <>
-      {/* Page Banner */}
-      <div
-        className="te-breadcrumb-area"
-        style={{
-          backgroundImage: "url('/images/section-bg/page-header.jpg')",
-        }}
-      >
-        <div className="container">
-          <div className="te-breadcrumb-content text-center">
-            <h1 className="te-breadcrumb-title">Our Blog</h1>
-            <ul className="te-breadcrumb-list">
-              <li>
-                <a href="/">Home</a>
-              </li>
-              <li className="active">Blog</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <PageBanner 
+        title="Our Blog"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Blog' }
+        ]}
+      />
 
       {/* Blog Content */}
       <section className="te-py-120">
@@ -263,6 +252,15 @@ export default function BlogPage() {
 
         .blog-read-more:hover {
           gap: 12px;
+        }
+
+        .dark button[style*="background: #f3f4f6"] {
+          background: #2a2a2a !important;
+          color: #d1d5db !important;
+        }
+
+        .dark h3, .dark p {
+          color: #d1d5db !important;
         }
       `}</style>
     </>

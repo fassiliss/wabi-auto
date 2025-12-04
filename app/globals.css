@@ -198,3 +198,193 @@ img {
 .dark .admin-btn-header:hover {
     background: #6d28d9 !important;
 }
+
+/* ========================================= */
+/* COMPREHENSIVE DARK MODE TEXT VISIBILITY  */
+/* ========================================= */
+
+/* Section Titles & Headings */
+.dark .te-section-title-wrapper .title,
+.dark .te-section-title-wrapper .short-title,
+.dark .te-section-title-wrapper .desc,
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: #ffffff !important;
+}
+
+/* Paragraphs & Body Text */
+.dark p,
+.dark .desc,
+.dark span,
+.dark li {
+  color: #d1d5db !important;
+}
+
+/* Service Cards */
+.dark .te-info-card {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+.dark .te-info-card h3,
+.dark .te-info-card h4 {
+  color: #ffffff !important;
+}
+
+.dark .te-info-card p {
+  color: #d1d5db !important;
+}
+
+/* Blog Cards */
+.dark .blog-card {
+  background: #1a1a1a !important;
+}
+
+.dark .blog-title a {
+  color: #ffffff !important;
+}
+
+.dark .blog-excerpt,
+.dark .blog-meta {
+  color: #d1d5db !important;
+}
+
+/* Testimonial Cards */
+.dark .testimonial-card {
+  background: #1a1a1a !important;
+}
+
+.dark .testimonial-card p {
+  color: #d1d5db !important;
+}
+
+/* White Background Boxes in Dark Mode */
+.dark div[style*="background: white"],
+.dark div[style*="background: #fff"],
+.dark div[style*="background:#fff"],
+.dark div[style*="background-color: white"] {
+  background: #1a1a1a !important;
+}
+
+/* Form Elements */
+.dark input,
+.dark textarea,
+.dark select {
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+  border-color: #444 !important;
+}
+
+.dark label {
+  color: #e5e5e5 !important;
+}
+
+/* Links */
+.dark a:not(.te-theme-btn):not(.blog-read-more) {
+  color: #60a5fa !important;
+}
+
+/* Breadcrumbs - Keep White on Gradient Backgrounds */
+.te-breadcrumb-area h1,
+.te-breadcrumb-area p,
+.te-breadcrumb-area a,
+.te-breadcrumb-area li {
+  color: white !important;
+}
+
+/* Cards with Shadows */
+.dark .card,
+.dark article,
+.dark .service-card {
+  background: #1a1a1a !important;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Table Elements */
+.dark table {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+.dark th,
+.dark td {
+  color: #ffffff !important;
+  border-color: #333 !important;
+}
+
+/* Specific Section Styles */
+.dark .te-about-content,
+.dark .te-service-content {
+  color: #d1d5db !important;
+}
+
+/* Quote/Callout Boxes */
+.dark div[style*="background: #f8f9fa"],
+.dark div[style*="background: #f3f4f6"] {
+  background: #2a2a2a !important;
+}
+
+/* Stats/Info Boxes */
+.dark .stats-box,
+.dark .info-box {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+/* Ensure All Text is Readable */
+.dark * {
+  color: inherit;
+}
+
+.dark body {
+  color: #d1d5db;
+}
+
+
+/* ========================================= */
+/* DARKER CARDS IN DARK MODE                */
+/* ========================================= */
+
+.dark div[style*="background: white"],
+.dark div[style*="background:#fff"],
+.dark div[style*="background: #fff"],
+.dark .contact-info-wrapper,
+.dark .contact-form-wrapper,
+.dark .blog-card,
+.dark article,
+.dark .service-card {
+  background: #0f0f0f !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Card Borders for Better Definition */
+.dark div[style*="background: white"],
+.dark .contact-info-wrapper,
+.dark .contact-form-wrapper,
+.dark .blog-card,
+.dark article {
+  border: 1px solid #222 !important;
+}
+
+/* Form Inputs Even Darker */
+.dark input,
+.dark textarea,
+.dark select,
+.dark .contact-input {
+  background: #0a0a0a !important;
+  border-color: #333 !important;
+  color: #ffffff !important;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus,
+.dark .contact-input:focus {
+  background: #0a0a0a !important;
+  border-color: #60a5fa !important;
+}
+
+/* Section Backgrounds Darker */
+.dark section[style*="background: #f8f9fa"] {
+  background: #050505 !important;
+}
+

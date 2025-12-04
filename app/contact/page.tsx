@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import PageBanner from '../components/PageBanner';
 import Footer from '../components/Footer';
 
 export default function ContactPage() {
@@ -49,27 +50,14 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Page Banner */}
-      <div
-        className="te-breadcrumb-area"
-        style={{
-          backgroundImage: "url('/images/section-bg/page-header.jpg')",
-        }}
-      >
-        <div className="container">
-          <div className="te-breadcrumb-content text-center">
-            <h1 className="te-breadcrumb-title">Contact Us</h1>
-            <ul className="te-breadcrumb-list">
-              <li>
-                <a href="/">Home</a>
-              </li>
-              <li className="active">Contact</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <PageBanner 
+        title="Contact Us"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Contact' }
+        ]}
+      />
 
-      {/* Contact Section */}
       <section className="te-py-120">
         <div className="container">
           <div className="row gy-5">
@@ -233,14 +221,16 @@ export default function ContactPage() {
 
       <style jsx>{`
         .contact-info-wrapper {
-          background: #f8f9fa;
+          background: white;
           padding: 40px 30px;
           border-radius: 12px;
           height: 100%;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .dark .contact-info-wrapper {
-          background: #1a1a1a;
+          background: #1a1a1a !important;
+          box-shadow: 0 2px 10px rgba(255,255,255,0.05) !important;
         }
 
         .contact-info-item {
@@ -268,7 +258,7 @@ export default function ContactPage() {
         }
 
         .dark .contact-info-item h5 {
-          color: #ffffff;
+          color: #ffffff !important;
         }
 
         .contact-info-item p {
@@ -277,19 +267,27 @@ export default function ContactPage() {
         }
 
         .dark .contact-info-item p {
-          color: #d1d5db;
+          color: #d1d5db !important;
+        }
+
+        .contact-info-wrapper h3 {
+          color: #333;
+        }
+
+        .dark .contact-info-wrapper h3 {
+          color: #ffffff !important;
         }
 
         .contact-form-wrapper {
-          background: #ffffff;
+          background: white;
           padding: 40px;
           border-radius: 12px;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .dark .contact-form-wrapper {
-          background: #1a1a1a;
-          box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
+          background: #1a1a1a !important;
+          box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05) !important;
         }
 
         .contact-form-wrapper h3 {
@@ -297,7 +295,7 @@ export default function ContactPage() {
         }
 
         .dark .contact-form-wrapper h3 {
-          color: #ffffff;
+          color: #ffffff !important;
         }
 
         .contact-input {
@@ -306,14 +304,14 @@ export default function ContactPage() {
           border-radius: 8px;
           font-size: 15px;
           transition: all 0.3s ease;
-          background: #ffffff;
+          background: white;
           color: #333;
         }
 
         .dark .contact-input {
-          background: #2a2a2a;
-          border-color: #444;
-          color: #ffffff;
+          background: #2a2a2a !important;
+          border-color: #444 !important;
+          color: #ffffff !important;
         }
 
         .contact-input:focus {
@@ -323,8 +321,8 @@ export default function ContactPage() {
         }
 
         .dark .contact-input:focus {
-          border-color: #60a5fa;
-          box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+          border-color: #60a5fa !important;
+          box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1) !important;
         }
 
         .contact-input::placeholder {
@@ -332,7 +330,7 @@ export default function ContactPage() {
         }
 
         .dark .contact-input::placeholder {
-          color: #666;
+          color: #666 !important;
         }
 
         select.contact-input {

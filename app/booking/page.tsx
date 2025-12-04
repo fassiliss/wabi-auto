@@ -1,8 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import PageBanner from '../components/PageBanner';
 import Footer from '../components/Footer';
 
 export default function BookingPage() {
+  const [isDark, setIsDark] = useState(false);
   const [formData, setFormData] = useState({
     customerName: '',
     email: '',
@@ -20,6 +22,16 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -68,69 +80,69 @@ export default function BookingPage() {
     setLoading(false);
   };
 
+  const wrapperStyle = {
+    background: isDark ? '#0f0f0f' : 'white',
+    padding: '40px',
+    borderRadius: '12px',
+    boxShadow: isDark ? '0 2px 10px rgba(0,0,0,0.3)' : '0 2px 10px rgba(0,0,0,0.08)',
+    border: isDark ? '1px solid #222' : 'none',
+  };
+
+  const titleStyle = {
+    color: isDark ? '#ffffff' : '#333',
+    marginBottom: '10px',
+  };
+
+  const subtitleStyle = {
+    color: isDark ? '#d1d5db' : '#666',
+  };
+
+  const sectionTitleStyle = {
+    fontSize: '18px',
+    color: isDark ? '#ffffff' : '#333',
+    marginBottom: '20px',
+    marginTop: '30px',
+    borderBottom: `2px solid ${isDark ? '#333' : '#e5e7eb'}`,
+    paddingBottom: '10px',
+  };
+
+  const labelStyle = {
+    display: 'block',
+    marginBottom: '8px',
+    fontWeight: '600',
+    color: isDark ? '#e5e5e5' : '#333',
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '12px',
+    border: `1px solid ${isDark ? '#333' : '#ddd'}`,
+    borderRadius: '8px',
+    fontSize: '15px',
+    boxSizing: 'border-box' as const,
+    background: isDark ? '#0a0a0a' : 'white',
+    color: isDark ? '#ffffff' : '#333',
+    fontFamily: 'inherit',
+  };
+
   return (
     <>
-      {/* Page Banner with Image Background */}
-      <div
-        style={{
-          backgroundImage: 'linear-gradient(rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7)), url(/images/booking-banner.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          padding: '100px 0 80px',
-        }}
-      >
-        <div className="container">
-          <div style={{ textAlign: 'center' }}>
-            <h1 style={{ 
-              color: 'white', 
-              fontSize: '42px', 
-              fontWeight: 'bold',
-              marginBottom: '20px',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-            }}>
-              Book Your Service
-            </h1>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              fontSize: '16px',
-              gap: '12px',
-            }}>
-              <a href="/" style={{ 
-                color: 'rgba(255,255,255,0.9)', 
-                textDecoration: 'none',
-                fontWeight: '500',
-              }}>
-                Home
-              </a>
-              <span style={{ color: 'rgba(255,255,255,0.6)' }}>/</span>
-              <span style={{ color: 'white', fontWeight: '600' }}>
-                Book Appointment
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageBanner 
+        title="Book Your Service"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Book Appointment' }
+        ]}
+      />
 
-      {/* Booking Form */}
       <section className="te-py-120">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 offset-lg-2">
-              <div style={{
-                background: 'white',
-                padding: '40px',
-                borderRadius: '12px',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-              }}>
+              <div style={wrapperStyle}>
                 <div style={{ marginBottom: '30px', textAlign: 'center' }}>
-                  <h2 style={{ color: '#333', marginBottom: '10px' }}>Schedule Your Service</h2>
-                  <p style={{ color: '#666' }}>Fill out the form below and we&apos;ll confirm your appointment</p>
+                  <h2 style={titleStyle}>Schedule Your Service</h2>
+                  <p style={subtitleStyle}>Fill out the form below and we&apos;ll confirm your appointment</p>
                 </div>
 
                 {success && (
@@ -160,15 +172,10 @@ export default function BookingPage() {
                 )}
 
                 <form onSubmit={handleSubmit}>
-                  {/* Customer Information */}
-                  <h3 style={{ fontSize: '18px', color: '#333', marginBottom: '20px', borderBottom: '2px solid #e5e7eb', paddingBottom: '10px' }}>
-                    Customer Information
-                  </h3>
+                  <h3 style={sectionTitleStyle}>Customer Information</h3>
 
                   <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                      Full Name *
-                    </label>
+                    <label style={labelStyle}>Full Name *</label>
                     <input
                       type="text"
                       name="customerName"
@@ -176,22 +183,13 @@ export default function BookingPage() {
                       onChange={handleChange}
                       required
                       placeholder="John Doe"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        fontSize: '15px',
-                        boxSizing: 'border-box',
-                      }}
+                      style={inputStyle}
                     />
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                        Email *
-                      </label>
+                      <label style={labelStyle}>Email *</label>
                       <input
                         type="email"
                         name="email"
@@ -199,21 +197,12 @@ export default function BookingPage() {
                         onChange={handleChange}
                         required
                         placeholder="john@example.com"
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          border: '1px solid #ddd',
-                          borderRadius: '8px',
-                          fontSize: '15px',
-                          boxSizing: 'border-box',
-                        }}
+                        style={inputStyle}
                       />
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                        Phone *
-                      </label>
+                      <label style={labelStyle}>Phone *</label>
                       <input
                         type="tel"
                         name="phone"
@@ -221,28 +210,16 @@ export default function BookingPage() {
                         onChange={handleChange}
                         required
                         placeholder="(555) 123-4567"
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          border: '1px solid #ddd',
-                          borderRadius: '8px',
-                          fontSize: '15px',
-                          boxSizing: 'border-box',
-                        }}
+                        style={inputStyle}
                       />
                     </div>
                   </div>
 
-                  {/* Vehicle Information */}
-                  <h3 style={{ fontSize: '18px', color: '#333', marginBottom: '20px', marginTop: '30px', borderBottom: '2px solid #e5e7eb', paddingBottom: '10px' }}>
-                    Vehicle Information
-                  </h3>
+                  <h3 style={sectionTitleStyle}>Vehicle Information</h3>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', marginBottom: '20px' }}>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                        Year *
-                      </label>
+                      <label style={labelStyle}>Year *</label>
                       <input
                         type="text"
                         name="vehicleYear"
@@ -250,21 +227,12 @@ export default function BookingPage() {
                         onChange={handleChange}
                         required
                         placeholder="2020"
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          border: '1px solid #ddd',
-                          borderRadius: '8px',
-                          fontSize: '15px',
-                          boxSizing: 'border-box',
-                        }}
+                        style={inputStyle}
                       />
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                        Make *
-                      </label>
+                      <label style={labelStyle}>Make *</label>
                       <input
                         type="text"
                         name="vehicleMake"
@@ -272,21 +240,12 @@ export default function BookingPage() {
                         onChange={handleChange}
                         required
                         placeholder="Toyota"
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          border: '1px solid #ddd',
-                          borderRadius: '8px',
-                          fontSize: '15px',
-                          boxSizing: 'border-box',
-                        }}
+                        style={inputStyle}
                       />
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                        Model *
-                      </label>
+                      <label style={labelStyle}>Model *</label>
                       <input
                         type="text"
                         name="vehicleModel"
@@ -294,62 +253,33 @@ export default function BookingPage() {
                         onChange={handleChange}
                         required
                         placeholder="Camry"
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          border: '1px solid #ddd',
-                          borderRadius: '8px',
-                          fontSize: '15px',
-                          boxSizing: 'border-box',
-                        }}
+                        style={inputStyle}
                       />
                     </div>
                   </div>
 
                   <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                      License Plate (Optional)
-                    </label>
+                    <label style={labelStyle}>License Plate (Optional)</label>
                     <input
                       type="text"
                       name="licensePlate"
                       value={formData.licensePlate}
                       onChange={handleChange}
                       placeholder="ABC-1234"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        fontSize: '15px',
-                        boxSizing: 'border-box',
-                      }}
+                      style={inputStyle}
                     />
                   </div>
 
-                  {/* Service Details */}
-                  <h3 style={{ fontSize: '18px', color: '#333', marginBottom: '20px', marginTop: '30px', borderBottom: '2px solid #e5e7eb', paddingBottom: '10px' }}>
-                    Service Details
-                  </h3>
+                  <h3 style={sectionTitleStyle}>Service Details</h3>
 
                   <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                      Service Type *
-                    </label>
+                    <label style={labelStyle}>Service Type *</label>
                     <select
                       name="serviceType"
                       value={formData.serviceType}
                       onChange={handleChange}
                       required
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        fontSize: '15px',
-                        cursor: 'pointer',
-                        boxSizing: 'border-box',
-                      }}
+                      style={{ ...inputStyle, cursor: 'pointer' }}
                     >
                       <option value="Engine Diagnostics">Engine Diagnostics</option>
                       <option value="Suspension Tuning">Suspension Tuning</option>
@@ -365,9 +295,7 @@ export default function BookingPage() {
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                        Preferred Date *
-                      </label>
+                      <label style={labelStyle}>Preferred Date *</label>
                       <input
                         type="date"
                         name="appointmentDate"
@@ -375,35 +303,18 @@ export default function BookingPage() {
                         onChange={handleChange}
                         required
                         min={new Date().toISOString().split('T')[0]}
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          border: '1px solid #ddd',
-                          borderRadius: '8px',
-                          fontSize: '15px',
-                          boxSizing: 'border-box',
-                        }}
+                        style={inputStyle}
                       />
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                        Preferred Time *
-                      </label>
+                      <label style={labelStyle}>Preferred Time *</label>
                       <select
                         name="appointmentTime"
                         value={formData.appointmentTime}
                         onChange={handleChange}
                         required
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          border: '1px solid #ddd',
-                          borderRadius: '8px',
-                          fontSize: '15px',
-                          cursor: 'pointer',
-                          boxSizing: 'border-box',
-                        }}
+                        style={{ ...inputStyle, cursor: 'pointer' }}
                       >
                         <option value="09:00">9:00 AM</option>
                         <option value="10:00">10:00 AM</option>
@@ -419,45 +330,24 @@ export default function BookingPage() {
                   </div>
 
                   <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                      Additional Notes
-                    </label>
+                    <label style={labelStyle}>Additional Notes</label>
                     <textarea
                       name="notes"
                       value={formData.notes}
                       onChange={handleChange}
                       rows={4}
                       placeholder="Any specific issues or requests..."
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        fontSize: '15px',
-                        fontFamily: 'inherit',
-                        resize: 'vertical',
-                        boxSizing: 'border-box',
-                      }}
+                      style={{ ...inputStyle, resize: 'vertical' as const }}
                     />
                   </div>
 
                   <div style={{ marginBottom: '30px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-                      Notification Preference
-                    </label>
+                    <label style={labelStyle}>Notification Preference</label>
                     <select
                       name="notificationPreference"
                       value={formData.notificationPreference}
                       onChange={handleChange}
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        fontSize: '15px',
-                        cursor: 'pointer',
-                        boxSizing: 'border-box',
-                      }}
+                      style={{ ...inputStyle, cursor: 'pointer' }}
                     >
                       <option value="email">Email</option>
                       <option value="sms">SMS</option>
@@ -465,7 +355,6 @@ export default function BookingPage() {
                     </select>
                   </div>
 
-                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={loading}
@@ -493,32 +382,6 @@ export default function BookingPage() {
       </section>
 
       <Footer />
-
-      <style jsx>{`
-        .dark form input,
-        .dark form select,
-        .dark form textarea {
-          background: #1a1a1a;
-          color: #ffffff;
-          border-color: #333;
-        }
-
-        .dark form label {
-          color: #e5e5e5 !important;
-        }
-
-        .dark h2, .dark h3 {
-          color: #ffffff !important;
-        }
-
-        .dark p {
-          color: #d1d5db !important;
-        }
-
-        .dark div[style*="background: white"] {
-          background: #1a1a1a !important;
-        }
-      `}</style>
     </>
   );
 }

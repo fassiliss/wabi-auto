@@ -58,11 +58,11 @@ export default function Footer() {
               <ul className="te-footer-contact">
                 <li>
                   <i className="fa-solid fa-location-dot"></i>
-                  6391 Elgin St. Celina, Delaware 10299
+                  2401 Dickerson Pike, Nashville, TN 37207
                 </li>
                 <li>
                   <i className="fa-solid fa-phone"></i>
-                  (307) 555-0133
+                  (615) 582-3291
                 </li>
                 <li>
                   <i className="fa-solid fa-envelope"></i>

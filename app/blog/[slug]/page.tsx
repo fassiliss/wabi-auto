@@ -1,6 +1,4 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Footer from '../../components/Footer';
 
@@ -14,145 +12,121 @@ interface BlogPost {
   imageUrl: string;
   author: string;
   views: number;
+  published: boolean;
   createdAt: string;
 }
 
-export default function BlogPostPage() {
-  const params = useParams();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (params.slug) {
-      fetchPost();
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  
+  let post: BlogPost | null = null;
+  
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/blog`, {
+      cache: 'no-store',
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      post = data.data.find((p: BlogPost) => p.slug === slug);
     }
-  }, [params.slug]);
-
-  const fetchPost = async () => {
-    try {
-      // Find post by slug
-      const res = await fetch('/api/blog');
-      const data = await res.json();
-      
-      if (data.success) {
-        const foundPost = data.data.find((p: BlogPost) => p.slug === params.slug);
-        if (foundPost) {
-          setPost(foundPost);
-          // Increment views
-          incrementViews(foundPost._id);
-        } else {
-          setError('Blog post not found');
-        }
-      }
-    } catch (err) {
-      setError('Failed to load blog post');
-    }
-    setLoading(false);
-  };
-
-  const incrementViews = async (id: string) => {
-    try {
-      await fetch(`/api/blog/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ incrementViews: true }),
-      });
-    } catch (err) {
-      console.error('Failed to increment views:', err);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Loading...</p>
-      </div>
-    );
+  } catch (error) {
+    console.error('Error fetching blog post:', error);
   }
 
-  if (error || !post) {
-    return (
-      <>
-        <div className="te-breadcrumb-area" style={{ backgroundImage: "url('/images/section-bg/page-header.jpg')" }}>
-          <div className="container">
-            <div className="te-breadcrumb-content text-center">
-              <h1 className="te-breadcrumb-title">Blog Post Not Found</h1>
-            </div>
-          </div>
-        </div>
-        <section className="te-py-120">
-          <div className="container">
-            <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <h3 style={{ color: '#666' }}>{error || 'Post not found'}</h3>
-              <Link 
-                href="/blog"
-                style={{
-                  marginTop: '20px',
-                  display: 'inline-block',
-                  padding: '12px 24px',
-                  background: '#2563eb',
-                  color: 'white',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  fontWeight: '600',
-                }}
-              >
-                ← Back to Blog
-              </Link>
-            </div>
-          </div>
-        </section>
-        <Footer />
-      </>
-    );
+  if (!post) {
+    notFound();
   }
+
+  // Increment view count
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    await fetch(`${baseUrl}/api/blog/${post._id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ incrementViews: true }),
+      cache: 'no-store',
+    });
+  } catch (error) {
+    console.error('Error incrementing views:', error);
+  }
+
+  const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
     <>
-      {/* Page Banner */}
       <div
-        className="te-breadcrumb-area"
         style={{
-          backgroundImage: "url('/images/section-bg/page-header.jpg')",
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          padding: '80px 0',
         }}
       >
         <div className="container">
-          <div className="te-breadcrumb-content text-center">
-            <h1 className="te-breadcrumb-title">{post.title}</h1>
-            <ul className="te-breadcrumb-list">
-              <li>
-                <a href="/">Home</a>
-              </li>
-              <li>
-                <a href="/blog">Blog</a>
-              </li>
-              <li className="active">{post.category}</li>
-            </ul>
+          <div style={{ textAlign: 'center' }}>
+            <h1 style={{ color: 'white', marginBottom: '20px', fontSize: '36px' }}>{post.title}</h1>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', fontSize: '16px', flexWrap: 'wrap' }}>
+              <Link href="/" style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'none' }}>
+                Home
+              </Link>
+              <span style={{ color: 'rgba(255,255,255,0.6)' }}>/</span>
+              <Link href="/blog" style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'none' }}>
+                Blog
+              </Link>
+              <span style={{ color: 'rgba(255,255,255,0.6)' }}>/</span>
+              <span style={{ color: 'white', fontWeight: '600' }}>{post.title}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Blog Post Content */}
       <section className="te-py-120">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 offset-lg-2">
-              <article className="blog-post-detail">
-                {/* Post Meta */}
-                <div className="post-meta">
-                  <span className="category-badge">{post.category}</span>
-                  <div className="meta-info">
-                    <span><i className="fa-solid fa-user"></i> {post.author}</span>
-                    <span><i className="fa-solid fa-calendar"></i> {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                    <span><i className="fa-solid fa-eye"></i> {post.views} views</span>
-                  </div>
+              <article style={{
+                background: 'white',
+                padding: '40px',
+                borderRadius: '12px',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+              }}>
+                <div style={{
+                  display: 'inline-block',
+                  padding: '6px 16px',
+                  background: '#2563eb',
+                  color: 'white',
+                  borderRadius: '20px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  marginBottom: '20px',
+                }}>
+                  {post.category}
                 </div>
 
-                {/* Featured Image */}
-                <div className="post-image">
-                  <img 
-                    src={post.imageUrl} 
+                <div style={{
+                  display: 'flex',
+                  gap: '20px',
+                  fontSize: '14px',
+                  color: '#666',
+                  marginBottom: '20px',
+                  flexWrap: 'wrap',
+                }}>
+                  <span><i className="fa-solid fa-user"></i> {post.author}</span>
+                  <span><i className="fa-solid fa-calendar"></i> {formattedDate}</span>
+                  <span><i className="fa-solid fa-eye"></i> {post.views} views</span>
+                </div>
+
+                {post.imageUrl && post.imageUrl !== '/images/blog/default-blog.jpg' && (
+                  <img
+                    src={post.imageUrl}
                     alt={post.title}
                     style={{
                       width: '100%',
@@ -161,25 +135,41 @@ export default function BlogPostPage() {
                       marginBottom: '30px',
                     }}
                   />
-                </div>
+                )}
 
-                {/* Post Content */}
-                <div className="post-content">
-                  <div className="post-excerpt">
+                <div style={{
+                  padding: '20px',
+                  background: '#f8f9fa',
+                  borderLeft: '4px solid #2563eb',
+                  marginBottom: '30px',
+                  borderRadius: '8px',
+                }}>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '16px',
+                    fontStyle: 'italic',
+                    color: '#333',
+                  }}>
                     {post.excerpt}
-                  </div>
-                  <div className="post-body">
-                    {post.content.split('\n').map((paragraph, index) => (
-                      paragraph.trim() && (
-                        <p key={index}>{paragraph}</p>
-                      )
-                    ))}
-                  </div>
+                  </p>
                 </div>
 
-                {/* Back to Blog Button */}
-                <div style={{ marginTop: '40px', textAlign: 'center' }}>
-                  <Link 
+                <div style={{
+                  fontSize: '16px',
+                  lineHeight: '1.8',
+                  color: '#333',
+                }}>
+                  {post.content.split('\n').map((paragraph: string, index: number) => (
+                    paragraph.trim() && (
+                      <p key={index} style={{ marginBottom: '20px' }}>
+                        {paragraph}
+                      </p>
+                    )
+                  ))}
+                </div>
+
+                <div style={{ marginTop: '40px', paddingTop: '30px', borderTop: '1px solid #e5e7eb' }}>
+                  <Link
                     href="/blog"
                     style={{
                       display: 'inline-block',
@@ -204,84 +194,20 @@ export default function BlogPostPage() {
       <Footer />
 
       <style jsx>{`
-        .blog-post-detail {
-          background: white;
-          padding: 40px;
-          border-radius: 12px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        .dark article {
+          background: #1a1a1a !important;
         }
 
-        .dark .blog-post-detail {
-          background: #1a1a1a;
-          box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
+        .dark h1, .dark p, .dark span {
+          color: #e5e5e5 !important;
         }
 
-        .post-meta {
-          margin-bottom: 30px;
+        .dark div[style*="background: #f8f9fa"] {
+          background: #2a2a2a !important;
         }
 
-        .category-badge {
-          display: inline-block;
-          background: #2563eb;
-          color: white;
-          padding: 8px 16px;
-          border-radius: 20px;
-          font-size: 13px;
-          font-weight: 600;
-          margin-bottom: 15px;
-        }
-
-        .meta-info {
-          display: flex;
-          gap: 20px;
-          flex-wrap: wrap;
-          font-size: 14px;
-          color: #666;
-        }
-
-        .dark .meta-info {
-          color: #999;
-        }
-
-        .meta-info span {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-
-        .post-content {
-          font-size: 16px;
-          line-height: 1.8;
-          color: #333;
-        }
-
-        .dark .post-content {
-          color: #e5e5e5;
-        }
-
-        .post-excerpt {
-          font-size: 18px;
-          font-weight: 500;
-          color: #555;
-          margin-bottom: 25px;
-          padding: 20px;
-          background: #f8f9fa;
-          border-left: 4px solid #2563eb;
-          border-radius: 8px;
-        }
-
-        .dark .post-excerpt {
-          background: #0f0f0f;
-          color: #d1d5db;
-        }
-
-        .post-body p {
-          margin-bottom: 20px;
-          line-height: 1.8;
-        }
-
-        .post-body p:last-child {
-          margin-bottom: 0;
+        .dark div[style*="color: #333"] p {
+          color: #e5e5e5 !important;
         }
       `}</style>
     </>

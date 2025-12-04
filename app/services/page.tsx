@@ -1,7 +1,6 @@
 'use client';
-
+import PageBanner from '../components/PageBanner';
 import Footer from '../components/Footer';
-
 
 export default function ServicesPage() {
   const services = [
@@ -74,25 +73,13 @@ export default function ServicesPage() {
 
   return (
     <>
-      <div
-        className="te-breadcrumb-area"
-        style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          padding: '80px 0',
-        }}
-      >
-        <div className="container">
-          <div className="te-breadcrumb-content text-center">
-            <h1 className="te-breadcrumb-title" style={{ color: 'white' }}>Our Services</h1>
-            <ul className="te-breadcrumb-list">
-              <li>
-                <a href="/" style={{ color: 'rgba(255,255,255,0.8)' }}>Home</a>
-              </li>
-              <li className="active" style={{ color: 'white' }}>Services</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <PageBanner 
+        title="Our Services"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Services' }
+        ]}
+      />
 
       <section className="te-py-120">
         <div className="container">
@@ -107,13 +94,7 @@ export default function ServicesPage() {
           <div className="row gy-4">
             {services.map((service) => (
               <div key={service.id} id={service.id} className="col-lg-6" style={{ scrollMarginTop: '100px' }}>
-                <div style={{
-                  background: 'white',
-                  padding: '40px',
-                  borderRadius: '12px',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-                  height: '100%',
-                }}>
+                <div className="service-card">
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
                     <div style={{
                       width: '60px',
@@ -127,22 +108,19 @@ export default function ServicesPage() {
                     }}>
                       <i className={service.icon} style={{ fontSize: '24px', color: 'white' }}></i>
                     </div>
-                    <h3 style={{ margin: 0, fontSize: '24px', color: '#333' }}>{service.title}</h3>
+                    <h3 className="service-title">{service.title}</h3>
                   </div>
                   
-                  <p style={{ color: '#666', lineHeight: '1.7', marginBottom: '20px' }}>
+                  <p className="service-description">
                     {service.description}
                   </p>
                   
-                  <h4 style={{ fontSize: '18px', color: '#333', marginBottom: '15px' }}>What's Included:</h4>
+                  <h4 className="features-title">
+                    What&apos;s Included:
+                  </h4>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                     {service.features.map((feature, index) => (
-                      <li key={index} style={{ 
-                        padding: '8px 0', 
-                        color: '#666',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}>
+                      <li key={index} className="feature-item">
                         <i className="fa-solid fa-check" style={{ 
                           color: '#2563eb', 
                           marginRight: '10px',
@@ -156,16 +134,7 @@ export default function ServicesPage() {
                   <div style={{ marginTop: '25px' }}>
                     <a
                       href="/booking"
-                      style={{
-                        display: 'inline-block',
-                        padding: '12px 30px',
-                        background: '#2563eb',
-                        color: 'white',
-                        borderRadius: '8px',
-                        textDecoration: 'none',
-                        fontWeight: '600',
-                        transition: 'all 0.3s ease',
-                      }}
+                      className="service-btn"
                     >
                       Book This Service
                     </a>
@@ -180,17 +149,83 @@ export default function ServicesPage() {
       <Footer />
 
       <style jsx>{`
-        .dark h1, .dark h2, .dark h3, .dark h4 {
+        .service-card {
+          background: white;
+          padding: 40px;
+          border-radius: 12px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+          height: 100%;
+        }
+
+        .dark .service-card {
+          background: #0f0f0f !important;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+          border: 1px solid #222 !important;
+        }
+
+        .service-title {
+          margin: 0;
+          font-size: 24px;
+          color: #333;
+        }
+
+        .dark .service-title {
           color: #ffffff !important;
         }
-        
-        .dark p, .dark li {
+
+        .service-description {
+          color: #666;
+          line-height: 1.7;
+          margin-bottom: 20px;
+        }
+
+        .dark .service-description {
           color: #d1d5db !important;
         }
-        
-        .dark div[style*="background: white"] {
-          background: #1a1a1a !important;
-          box-shadow: 0 2px 10px rgba(255,255,255,0.05) !important;
+
+        .features-title {
+          font-size: 18px;
+          color: #333;
+          margin-bottom: 15px;
+        }
+
+        .dark .features-title {
+          color: #ffffff !important;
+        }
+
+        .feature-item {
+          padding: 8px 0;
+          color: #666;
+          display: flex;
+          align-items: center;
+        }
+
+        .dark .feature-item {
+          color: #d1d5db !important;
+        }
+
+        .service-btn {
+          display: inline-block;
+          padding: 12px 30px;
+          background: #2563eb;
+          color: white;
+          border-radius: 8px;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        .service-btn:hover {
+          background: #1d4ed8;
+          transform: translateY(-2px);
+        }
+
+        .dark h1, .dark h2 {
+          color: #ffffff !important;
+        }
+
+        .dark p.desc {
+          color: #d1d5db !important;
         }
       `}</style>
     </>
