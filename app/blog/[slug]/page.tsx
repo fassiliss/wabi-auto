@@ -1,6 +1,9 @@
-import { notFound } from 'next/navigation';
+'use client';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Footer from '../../components/Footer';
+import PageBanner from '../../components/PageBanner';
 
 interface BlogPost {
   _id: string;
@@ -16,44 +19,83 @@ interface BlogPost {
   createdAt: string;
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  
-  let post: BlogPost | null = null;
-  
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/blog`, {
-      cache: 'no-store',
-    });
-    const data = await res.json();
-    
-    if (data.success) {
-      post = data.data.find((p: BlogPost) => p.slug === slug);
+export default function BlogPostPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPost();
+  }, [slug]);
+
+  const fetchPost = async () => {
+    try {
+      const res = await fetch('/api/blog');
+      const data = await res.json();
+      
+      if (data.success) {
+        const foundPost = data.data.find((p: BlogPost) => p.slug === slug);
+        setPost(foundPost || null);
+        
+        // Increment view count
+        if (foundPost) {
+          await fetch(`/api/blog/${foundPost._id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ incrementViews: true }),
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching blog post:', error);
     }
-  } catch (error) {
-    console.error('Error fetching blog post:', error);
+    setLoading(false);
+  };
+
+  if (loading) {
+    return (
+      <>
+        <PageBanner 
+          title="Loading..."
+          breadcrumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Blog', href: '/blog' },
+          ]}
+        />
+        <section className="te-py-120">
+          <div className="container">
+            <div style={{ textAlign: 'center', padding: '60px 0' }}>
+              <p>Loading post...</p>
+            </div>
+          </div>
+        </section>
+        <Footer />
+      </>
+    );
   }
 
   if (!post) {
-    notFound();
-  }
-
-  // Increment view count
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    await fetch(`${baseUrl}/api/blog/${post._id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ incrementViews: true }),
-      cache: 'no-store',
-    });
-  } catch (error) {
-    console.error('Error incrementing views:', error);
+    return (
+      <>
+        <PageBanner 
+          title="Post Not Found"
+          breadcrumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Blog', href: '/blog' },
+          ]}
+        />
+        <section className="te-py-120">
+          <div className="container">
+            <div style={{ textAlign: 'center', padding: '60px 0' }}>
+              <h3 style={{ color: '#666' }}>Blog post not found</h3>
+              <Link href="/blog" style={{ color: '#2563eb' }}>← Back to Blog</Link>
+            </div>
+          </div>
+        </section>
+        <Footer />
+      </>
+    );
   }
 
   const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
@@ -64,29 +106,14 @@ export default async function BlogPostPage({
 
   return (
     <>
-      <div
-        style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          padding: '80px 0',
-        }}
-      >
-        <div className="container">
-          <div style={{ textAlign: 'center' }}>
-            <h1 style={{ color: 'white', marginBottom: '20px', fontSize: '36px' }}>{post.title}</h1>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', fontSize: '16px', flexWrap: 'wrap' }}>
-              <Link href="/" style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'none' }}>
-                Home
-              </Link>
-              <span style={{ color: 'rgba(255,255,255,0.6)' }}>/</span>
-              <Link href="/blog" style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'none' }}>
-                Blog
-              </Link>
-              <span style={{ color: 'rgba(255,255,255,0.6)' }}>/</span>
-              <span style={{ color: 'white', fontWeight: '600' }}>{post.title}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageBanner 
+        title={post.title}
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Blog', href: '/blog' },
+          { label: post.title },
+        ]}
+      />
 
       <section className="te-py-120">
         <div className="container">
@@ -179,7 +206,6 @@ export default async function BlogPostPage({
                       borderRadius: '8px',
                       textDecoration: 'none',
                       fontWeight: '600',
-                      transition: 'all 0.3s ease',
                     }}
                   >
                     ← Back to Blog
@@ -195,7 +221,8 @@ export default async function BlogPostPage({
 
       <style jsx>{`
         .dark article {
-          background: #1a1a1a !important;
+          background: #0f0f0f !important;
+          border: 1px solid #222 !important;
         }
 
         .dark h1, .dark p, .dark span {
@@ -203,7 +230,7 @@ export default async function BlogPostPage({
         }
 
         .dark div[style*="background: #f8f9fa"] {
-          background: #2a2a2a !important;
+          background: #1a1a1a !important;
         }
 
         .dark div[style*="color: #333"] p {
