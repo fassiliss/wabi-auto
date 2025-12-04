@@ -1,69 +1,36 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
-  const [isSticky, setIsSticky] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
-    <header className={`header-area ${isSticky ? 'is-sticky' : ''}`}>
-      <div className="header-top" style={{ display: 'none' }}>
+    <header className="header-area">
+      {/* Top Bar */}
+      <div className="header-top">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6 col-md-6">
-              <div className="te-header-contact-info">
-                <span>
-                  <i className="fa-solid fa-envelope"></i> info@example.com
-                </span>
-                <span>
-                  <i className="fa-solid fa-location-dot"></i> 6391 Elgin Rt.Mirpur, 10299
-                </span>
-                <span>
-                  <i className="fa-solid fa-clock"></i> Sunday - Friday: 9 am - 8 pm
-                </span>
+              <div className="header-contact">
+                <span><i className="fa-solid fa-envelope"></i> info@example.com</span>
+                <span><i className="fa-solid fa-location-dot"></i> 6391 Elgin Rt.Mirpur, 10299</span>
               </div>
             </div>
             <div className="col-lg-6 col-md-6">
-              <div className="te-header-social" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '15px' }}>
-                <a href="#" aria-label="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
-                <a href="#" aria-label="Twitter"><i className="fa-brands fa-twitter"></i></a>
-                <a href="#" aria-label="LinkedIn"><i className="fa-brands fa-linkedin-in"></i></a>
-                <a href="#" aria-label="YouTube"><i className="fa-brands fa-youtube"></i></a>
-                
-                <a 
-                  href="/admin"
-                  className="admin-icon-btn"
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: '#667eea',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease',
-                    marginLeft: '5px',
-                  }}
-                  title="Admin Dashboard"
-                >
-                  <i className="fa-solid fa-lock" style={{ fontSize: '14px' }}></i>
-                </a>
-
+              <div className="header-right">
+                <Link href="#" aria-label="Facebook"><i className="fa-brands fa-facebook-f"></i></Link>
+                <Link href="#" aria-label="Twitter"><i className="fa-brands fa-twitter"></i></Link>
+                <Link href="#" aria-label="LinkedIn"><i className="fa-brands fa-linkedin-in"></i></Link>
+                <Link href="#" aria-label="YouTube"><i className="fa-brands fa-youtube"></i></Link>
+                <Link href="/admin" className="admin-btn" title="Admin Dashboard">
+                  <i className="fa-solid fa-lock"></i>
+                </Link>
                 <ThemeToggle />
               </div>
             </div>
@@ -71,60 +38,32 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="te-header-menu-area">
+      {/* Main Header - Always Transparent */}
+      <div className="header-main">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-6 col-lg-2">
-              <div className="te-site-logo">
-                <a href="/">
-                  <h2 style={{ margin: 0, color: '#ff4646', fontWeight: 'bold', fontSize: 'clamp(18px, 4vw, 24px)' }}>
-                    <i className="fa-solid fa-car" style={{ marginRight: '8px' }}></i>
-                    Wabi Automotive
-                  </h2>
-                </a>
-              </div>
+              <Link href="/" className="logo">
+                <i className="fa-solid fa-car"></i>
+                <span>Wabi<br/>Automotive</span>
+              </Link>
             </div>
-            
             <div className="col-6 col-lg-10">
-              <nav className="te-main-menu desktop-menu">
+              <nav className="main-nav">
                 <ul>
-                  <li><a href="/">Home</a></li>
-                  <li><a href="/about">About Us</a></li>
-                  
-                  {/* Services Dropdown with Anchor Links */}
-                  <li className="has-submenu">
-                    <a href="/services">Services</a>
-                    <ul className="submenu">
-                      <li><a href="/services#engine-diagnostics">Engine Diagnostics</a></li>
-                      <li><a href="/services#suspension-tuning">Suspension Tuning</a></li>
-                      <li><a href="/services#transmission-service">Transmission Service</a></li>
-                      <li><a href="/services#oil-change">Oil Change</a></li>
-                      <li><a href="/services#brake-repair">Brake Repair</a></li>
-                    </ul>
-                  </li>
-                  
-                  <li><a href="/blog">Blog</a></li>
-                  <li><a href="/testimonials">Testimonials</a></li>
-                  <li><a href="/booking" style={{ color: '#2563eb', fontWeight: '600' }}>Book Service</a></li>
-                  <li><a href="/contact">Contact</a></li>
+                  <li><Link href="/">Home</Link></li>
+                  <li><Link href="/about">About Us</Link></li>
+                  <li><Link href="/services">Services</Link></li>
+                  <li><Link href="/blog">Blog</Link></li>
+                  <li><Link href="/testimonials">Testimonials</Link></li>
+                  <li><Link href="/booking" className="book-service">Book Service</Link></li>
+                  <li><Link href="/contact">Contact</Link></li>
                 </ul>
               </nav>
 
-              <div className="mobile-menu-toggle">
+              <div className="mobile-menu-btn">
                 <ThemeToggle />
-                <button 
-                  onClick={toggleMobileMenu}
-                  className="hamburger-btn"
-                  aria-label="Toggle menu"
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '24px',
-                    cursor: 'pointer',
-                    color: '#333',
-                    marginLeft: '15px',
-                  }}
-                >
+                <button onClick={toggleMobileMenu} aria-label="Toggle menu">
                   <i className={isMobileMenuOpen ? 'fa-solid fa-times' : 'fa-solid fa-bars'}></i>
                 </button>
               </div>
@@ -133,111 +72,204 @@ export default function Header() {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="mobile-menu-dropdown">
-            <nav>
-              <ul>
-                <li><a href="/" onClick={toggleMobileMenu}>Home</a></li>
-                <li><a href="/about" onClick={toggleMobileMenu}>About Us</a></li>
-                <li><a href="/services" onClick={toggleMobileMenu}>Services</a></li>
-                <li><a href="/blog" onClick={toggleMobileMenu}>Blog</a></li>
-                <li><a href="/testimonials" onClick={toggleMobileMenu}>Testimonials</a></li>
-                <li><a href="/booking" onClick={toggleMobileMenu}><i className="fa-solid fa-calendar"></i> Book Service</a></li>
-                <li><a href="/contact" onClick={toggleMobileMenu}>Contact</a></li>
-                <li><a href="/admin" onClick={toggleMobileMenu}><i className="fa-solid fa-lock"></i> Admin</a></li>
-              </ul>
-            </nav>
+          <div className="mobile-menu">
+            <ul>
+              <li><Link href="/" onClick={toggleMobileMenu}>Home</Link></li>
+              <li><Link href="/about" onClick={toggleMobileMenu}>About Us</Link></li>
+              <li><Link href="/services" onClick={toggleMobileMenu}>Services</Link></li>
+              <li><Link href="/blog" onClick={toggleMobileMenu}>Blog</Link></li>
+              <li><Link href="/testimonials" onClick={toggleMobileMenu}>Testimonials</Link></li>
+              <li><Link href="/booking" onClick={toggleMobileMenu}><i className="fa-solid fa-calendar"></i> Book Service</Link></li>
+              <li><Link href="/contact" onClick={toggleMobileMenu}>Contact</Link></li>
+              <li><Link href="/admin" onClick={toggleMobileMenu}><i className="fa-solid fa-lock"></i> Admin</Link></li>
+            </ul>
           </div>
         )}
       </div>
 
       <style jsx>{`
-        .desktop-menu {
+        .header-area {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 999;
+        }
+
+        .header-top {
+          background: #1a1a1a;
+          padding: 10px 0;
+          font-size: 13px;
+        }
+
+        .header-contact {
+          display: flex;
+          gap: 20px;
+          color: white;
+        }
+
+        .header-contact span {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .header-contact i {
+          color: #dc2626;
+        }
+
+        .header-right {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .header-right a {
+          color: white;
+          font-size: 14px;
+          transition: color 0.3s;
+        }
+
+        .header-right a:hover {
+          color: #2563eb;
+        }
+
+        .admin-btn {
+          width: 28px;
+          height: 28px;
+          background: #667eea;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s;
+        }
+
+        .admin-btn:hover {
+          background: #764ba2;
+          transform: scale(1.1);
+        }
+
+        .header-main {
+          background: transparent;
+          padding: 15px 0;
+        }
+
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          text-decoration: none;
+          color: #dc2626;
+        }
+
+        .logo i {
+          font-size: 28px;
+        }
+
+        .logo span {
+          font-size: 20px;
+          font-weight: bold;
+          line-height: 1.2;
+          color: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .main-nav {
           display: none;
         }
 
-        @media (min-width: 992px) {
-          .desktop-menu {
-            display: block;
-          }
-
-          .mobile-menu-toggle {
-            display: none !important;
-          }
-
-          .header-top {
-            display: block !important;
-          }
-        }
-
-        .mobile-menu-toggle {
+        .main-nav ul {
           display: flex;
-          align-items: center;
           justify-content: flex-end;
-        }
-
-        .dark .hamburger-btn {
-          color: #ffffff;
-        }
-
-        .mobile-menu-dropdown {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          background: white;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-          z-index: 1000;
-          animation: slideDown 0.3s ease;
-        }
-
-        .dark .mobile-menu-dropdown {
-          background: #1a1a1a;
-          box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .mobile-menu-dropdown nav ul {
+          align-items: center;
+          gap: 30px;
           list-style: none;
           margin: 0;
           padding: 0;
         }
 
-        .mobile-menu-dropdown nav ul li {
-          border-bottom: 1px solid #e5e7eb;
-        }
-
-        .dark .mobile-menu-dropdown nav ul li {
-          border-bottom-color: #333;
-        }
-
-        .mobile-menu-dropdown nav ul li a {
-          display: block;
-          padding: 15px 20px;
-          color: #333;
+        .main-nav a {
+          color: white;
           text-decoration: none;
           font-weight: 500;
-          transition: background 0.3s ease;
+          font-size: 15px;
+          transition: color 0.3s;
+          text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
-        .dark .mobile-menu-dropdown nav ul li a {
-          color: #ffffff;
+        .main-nav a:hover {
+          color: #60a5fa;
         }
 
-        .mobile-menu-dropdown nav ul li a:hover {
-          background: #f3f4f6;
+        .book-service {
+          color: #60a5fa !important;
+          font-weight: 600 !important;
         }
 
-        .dark .mobile-menu-dropdown nav ul li a:hover {
-          background: #2a2a2a;
+        .mobile-menu-btn {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 15px;
         }
 
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
+        .mobile-menu-btn button {
+          background: none;
+          border: none;
+          font-size: 24px;
+          color: white;
+          cursor: pointer;
+          text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .mobile-menu {
+          background: rgba(26, 26, 26, 0.95);
+          backdrop-filter: blur(10px);
+          border-top: 1px solid rgba(255,255,255,0.1);
+          padding: 10px 0;
+        }
+
+        .mobile-menu ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .mobile-menu li {
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu a {
+          display: block;
+          padding: 12px 20px;
+          color: white;
+          text-decoration: none;
+          font-weight: 500;
+        }
+
+        .mobile-menu a:hover {
+          background: rgba(255,255,255,0.1);
+        }
+
+        @media (min-width: 992px) {
+          .main-nav {
+            display: block;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+
+          .mobile-menu-btn {
+            display: none;
+          }
+
+          .header-top {
+            display: block;
+          }
+        }
+
+        @media (max-width: 991px) {
+          .header-top {
+            display: none;
           }
         }
       `}</style>
