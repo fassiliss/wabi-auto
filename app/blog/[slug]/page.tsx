@@ -38,7 +38,6 @@ export default function BlogPostPage() {
         const foundPost = data.data.find((p: BlogPost) => p.slug === slug);
         setPost(foundPost || null);
         
-        // Increment view count
         if (foundPost) {
           await fetch(`/api/blog/${foundPost._id}`, {
             method: 'PATCH',
@@ -56,13 +55,15 @@ export default function BlogPostPage() {
   if (loading) {
     return (
       <>
-        <PageBanner 
-          title="Loading..."
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Blog', href: '/blog' },
-          ]}
-        />
+        <div style={{ marginTop: '140px' }}>
+          <PageBanner 
+            title="Loading..."
+            breadcrumbs={[
+              { label: 'Home', href: '/' },
+              { label: 'Blog', href: '/blog' },
+            ]}
+          />
+        </div>
         <section className="te-py-120">
           <div className="container">
             <div style={{ textAlign: 'center', padding: '60px 0' }}>
@@ -78,13 +79,15 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <>
-        <PageBanner 
-          title="Post Not Found"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Blog', href: '/blog' },
-          ]}
-        />
+        <div style={{ marginTop: '140px' }}>
+          <PageBanner 
+            title="Post Not Found"
+            breadcrumbs={[
+              { label: 'Home', href: '/' },
+              { label: 'Blog', href: '/blog' },
+            ]}
+          />
+        </div>
         <section className="te-py-120">
           <div className="container">
             <div style={{ textAlign: 'center', padding: '60px 0' }}>
@@ -106,14 +109,16 @@ export default function BlogPostPage() {
 
   return (
     <>
-      <PageBanner 
-        title={post.title}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Blog', href: '/blog' },
-          { label: post.title },
-        ]}
-      />
+      <div style={{ marginTop: '140px' }}>
+        <PageBanner 
+          title={post.title}
+          breadcrumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Blog', href: '/blog' },
+            { label: post.title },
+          ]}
+        />
+      </div>
 
       <section className="te-py-120">
         <div className="container">
