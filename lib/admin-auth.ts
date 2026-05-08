@@ -53,7 +53,7 @@ export function isAdminSessionValid(value?: string) {
 }
 
 export function verifyAdminPassword(password: string) {
-  return timingSafeCompare(password, getAdminPassword());
+  return timingSafeCompare(password.trim(), getAdminPassword().trim());
 }
 
 export function isAdminRequest(request: NextRequest) {
