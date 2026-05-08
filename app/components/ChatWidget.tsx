@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 type ChatMessage = {
   _id?: string;
@@ -15,26 +16,40 @@ type ChatSession = {
 };
 
 const STORAGE_KEY = 'wabiChatSessionId';
+const LAST_SEEN_ADMIN_KEY = 'wabiLastSeenAdminMessage';
 const GREETING: ChatMessage = {
   sender: 'admin',
   text: 'Hi What can i help you',
 };
 
+function getMessageKey(message: ChatMessage) {
+  return message._id || `${message.createdAt}-${message.text}`;
+}
+
 export default function ChatWidget() {
+  const pathname = usePathname();
+  const isAdminPage = pathname.startsWith('/admin');
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [message, setMessage] = useState('');
   const [sessionId, setSessionId] = useState('');
   const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const knownAdminMessages = useRef(new Set<string>());
+  const hasLoadedSession = useRef(false);
+  const [unreadAdminReplies, setUnreadAdminReplies] = useState(0);
 
   useEffect(() => {
+    if (isAdminPage) {
+      return;
+    }
+
     const savedSessionId = localStorage.getItem(STORAGE_KEY) || '';
     setSessionId(savedSessionId);
-  }, []);
+  }, [isAdminPage]);
 
   useEffect(() => {
-    if (!sessionId) {
+    if (isAdminPage || !sessionId) {
       return;
     }
 
@@ -43,6 +58,29 @@ export default function ChatWidget() {
         const res = await fetch(`/api/chat?sessionId=${sessionId}`);
         const data = await res.json();
         if (data.success && data.data) {
+          const sessionMessages = data.data.messages as ChatMessage[];
+          const latestAdminMessage = [...sessionMessages].reverse().find((item) => item.sender === 'admin');
+          const latestAdminMessageKey = latestAdminMessage ? getMessageKey(latestAdminMessage) : '';
+          const lastSeenAdminMessage = localStorage.getItem(`${LAST_SEEN_ADMIN_KEY}:${sessionId}`) || '';
+          const hasUnreadAdminReply = Boolean(latestAdminMessageKey && latestAdminMessageKey !== lastSeenAdminMessage);
+
+          for (const item of sessionMessages) {
+            if (item.sender === 'admin') {
+              knownAdminMessages.current.add(getMessageKey(item));
+            }
+          }
+
+          if (hasUnreadAdminReply && !isOpen) {
+            if (document.visibilityState === 'visible') {
+              setIsOpen(true);
+              localStorage.setItem(`${LAST_SEEN_ADMIN_KEY}:${sessionId}`, latestAdminMessageKey);
+              setUnreadAdminReplies(0);
+            } else {
+              setUnreadAdminReplies(1);
+            }
+          }
+
+          hasLoadedSession.current = true;
           setMessages([GREETING, ...data.data.messages]);
         }
       } catch (error) {
@@ -54,9 +92,16 @@ export default function ChatWidget() {
     const interval = window.setInterval(loadChat, 5000);
 
     return () => window.clearInterval(interval);
-  }, [sessionId]);
+  }, [isAdminPage, isOpen, sessionId]);
 
   useEffect(() => {
+    if (isOpen) {
+      setUnreadAdminReplies(0);
+      const latestAdminMessage = [...messages].reverse().find((item) => item.sender === 'admin');
+      if (sessionId && latestAdminMessage) {
+        localStorage.setItem(`${LAST_SEEN_ADMIN_KEY}:${sessionId}`, getMessageKey(latestAdminMessage));
+      }
+    }
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen]);
 
@@ -83,6 +128,7 @@ export default function ChatWidget() {
         localStorage.setItem(STORAGE_KEY, data.data._id);
         setSessionId(data.data._id);
         setMessages([GREETING, ...data.data.messages]);
+        hasLoadedSession.current = true;
       }
     } catch (error) {
       console.error('Chat send failed:', error);
@@ -95,6 +141,10 @@ export default function ChatWidget() {
     }
   };
 
+  if (isAdminPage) {
+    return null;
+  }
+
   const clearChat = async () => {
     if (sessionId) {
       await fetch(`/api/chat?sessionId=${sessionId}`, { method: 'DELETE' }).catch(() => null);
@@ -103,7 +153,20 @@ export default function ChatWidget() {
     localStorage.removeItem(STORAGE_KEY);
     setSessionId('');
     setMessages([GREETING]);
+    setUnreadAdminReplies(0);
+    knownAdminMessages.current.clear();
+    hasLoadedSession.current = false;
     setIsOpen(false);
+  };
+
+  const toggleChat = () => {
+    setIsOpen((value) => {
+      if (!value) {
+        setUnreadAdminReplies(0);
+      }
+
+      return !value;
+    });
   };
 
   return (
@@ -155,9 +218,14 @@ export default function ChatWidget() {
         </div>
       )}
 
-      <button className="chat-toggle" type="button" onClick={() => setIsOpen((value) => !value)}>
+      <button className="chat-toggle" type="button" onClick={toggleChat}>
         <i className="fa-solid fa-comments"></i>
         Chat
+        {unreadAdminReplies > 0 && (
+          <span className="chat-unread" aria-label={`${unreadAdminReplies} unread chat replies`}>
+            {unreadAdminReplies > 9 ? '9+' : unreadAdminReplies}
+          </span>
+        )}
       </button>
 
       <style jsx>{`
@@ -183,6 +251,25 @@ export default function ChatWidget() {
           gap: 8px;
           padding: 14px 18px;
           text-transform: uppercase;
+          position: relative;
+        }
+
+        .chat-unread {
+          align-items: center;
+          background: #111827;
+          border: 2px solid #ffffff;
+          border-radius: 999px;
+          color: #ffffff;
+          display: inline-flex;
+          font-size: 11px;
+          font-weight: 950;
+          height: 22px;
+          justify-content: center;
+          min-width: 22px;
+          padding: 0 6px;
+          position: absolute;
+          right: -7px;
+          top: -8px;
         }
 
         .chat-backdrop {

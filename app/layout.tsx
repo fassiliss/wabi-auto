@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import Header from "./components/Header";
 import ChatWidget from "./components/ChatWidget";
+import AdminChatNotifier from "./components/AdminChatNotifier";
 
 // Template CSS
 
@@ -50,6 +51,7 @@ export default function RootLayout({
         <Header />
 
         {children}
+        <AdminChatNotifier />
         <ChatWidget />
         </body>
         </html>

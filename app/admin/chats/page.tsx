@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -19,12 +19,19 @@ type ChatSession = {
   createdAt: string;
 };
 
+type AudioWindow = Window & typeof globalThis & {
+  webkitAudioContext?: typeof AudioContext;
+};
+
 export default function AdminChatsPage() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [selectedId, setSelectedId] = useState('');
   const [reply, setReply] = useState('');
   const [loading, setLoading] = useState(true);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
   const [sending, setSending] = useState(false);
+  const hasLoadedChats = useRef(false);
+  const seenVisitorMessages = useRef(new Set<string>());
   const router = useRouter();
 
   const selectedChat = useMemo(
@@ -43,6 +50,29 @@ export default function AdminChatsPage() {
 
       const data = await res.json();
       if (data.success) {
+        const newVisitorMessages: ChatMessage[] = [];
+
+        for (const session of data.data as ChatSession[]) {
+          for (const message of session.messages) {
+            if (message.sender !== 'visitor') {
+              continue;
+            }
+
+            const key = message._id || `${session._id}-${message.createdAt}-${message.text}`;
+            if (!seenVisitorMessages.current.has(key)) {
+              if (hasLoadedChats.current) {
+                newVisitorMessages.push(message);
+              }
+              seenVisitorMessages.current.add(key);
+            }
+          }
+        }
+
+        if (newVisitorMessages.length > 0) {
+          notifyNewMessage(newVisitorMessages.at(-1)?.text || 'New website chat message');
+        }
+
+        hasLoadedChats.current = true;
         setSessions(data.data);
         setSelectedId((current) => current || data.data[0]?._id || '');
       }
@@ -54,6 +84,10 @@ export default function AdminChatsPage() {
   };
 
   useEffect(() => {
+    if ('Notification' in window) {
+      setNotificationPermission(Notification.permission);
+    }
+
     const isAuth = localStorage.getItem('adminAuth');
     if (!isAuth) {
       router.push('/admin');
@@ -65,6 +99,47 @@ export default function AdminChatsPage() {
 
     return () => window.clearInterval(interval);
   }, [router]);
+
+  const requestNotifications = async () => {
+    if (!('Notification' in window)) {
+      return;
+    }
+
+    const permission = await Notification.requestPermission();
+    setNotificationPermission(permission);
+  };
+
+  const notifyNewMessage = (text: string) => {
+    document.title = 'New chat message - Wabi Auto';
+
+    try {
+      const audioWindow = window as AudioWindow;
+      const AudioContextClass = audioWindow.AudioContext || audioWindow.webkitAudioContext;
+      if (!AudioContextClass) {
+        return;
+      }
+
+      const audioContext = new AudioContextClass();
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.frequency.value = 880;
+      gain.gain.value = 0.08;
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.18);
+    } catch {
+      // Browser sound permissions vary, so notification still works without audio.
+    }
+
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('New website chat message', {
+        body: text,
+        icon: '/favicon.ico',
+      });
+    }
+  };
 
   const sendReply = async (event: FormEvent) => {
     event.preventDefault();
@@ -160,7 +235,14 @@ export default function AdminChatsPage() {
             <h1 style={{ margin: 0, color: '#111827', fontWeight: 900 }}>Website Chats</h1>
             <p style={{ margin: '6px 0 0', color: '#6b7280' }}>Reply to visitors from the site chat box.</p>
           </div>
-          <Link href="/admin/dashboard" style={buttonStyle('#6b7280')}>Dashboard</Link>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            {notificationPermission !== 'granted' && 'Notification' in window && (
+              <button type="button" onClick={requestNotifications} style={buttonStyle('#2563eb')}>
+                Enable Notifications
+              </button>
+            )}
+            <Link href="/admin/dashboard" style={buttonStyle('#6b7280')}>Dashboard</Link>
+          </div>
         </div>
 
         <div style={{
