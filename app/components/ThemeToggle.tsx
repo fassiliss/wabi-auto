@@ -1,32 +1,51 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
+
+const themeChangeEvent = 'wabi-theme-change';
+
+function getPreferredDarkMode() {
+    if (typeof window === 'undefined') {
+        return false;
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark' ||
+        (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+}
+
+function subscribeToThemeChanges(callback: () => void) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    window.addEventListener('storage', callback);
+    window.addEventListener(themeChangeEvent, callback);
+    mediaQuery.addEventListener('change', callback);
+
+    return () => {
+        window.removeEventListener('storage', callback);
+        window.removeEventListener(themeChangeEvent, callback);
+        mediaQuery.removeEventListener('change', callback);
+    };
+}
+
+function getServerThemeSnapshot() {
+    return false;
+}
 
 export default function ThemeToggle() {
-    const [darkMode, setDarkMode] = useState(false);
-    const [mounted, setMounted] = useState(false);
+    const darkMode = useSyncExternalStore(
+        subscribeToThemeChanges,
+        getPreferredDarkMode,
+        getServerThemeSnapshot,
+    );
 
     useEffect(() => {
-        setMounted(true);
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            setDarkMode(true);
-            document.documentElement.classList.add('dark');
-        }
-    }, []);
+        document.documentElement.classList.toggle('dark', darkMode);
+    }, [darkMode]);
 
     const toggleDarkMode = () => {
-        const newMode = !darkMode;
-        setDarkMode(newMode);
-        if (newMode) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
+        localStorage.setItem('theme', darkMode ? 'light' : 'dark');
+        window.dispatchEvent(new Event(themeChangeEvent));
     };
-
-    if (!mounted) return null;
 
     return (
         <button

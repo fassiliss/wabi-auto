@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface ServiceRequest {
@@ -32,6 +33,11 @@ export default function AdminDashboard() {
   const fetchRequests = async () => {
     try {
       const res = await fetch('/api/service-requests');
+      if (res.status === 401) {
+        localStorage.removeItem('adminAuth');
+        router.push('/admin');
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setRequests(data.data);
@@ -73,6 +79,7 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = () => {
+    fetch('/api/admin/logout', { method: 'POST' });
     localStorage.removeItem('adminAuth');
     router.push('/admin');
   };
@@ -149,6 +156,36 @@ export default function AdminDashboard() {
           >
             Logout
           </button>
+          <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <Link
+              href="/admin/customers"
+              style={{
+                padding: '12px 24px',
+                background: '#111827',
+                color: 'white',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontWeight: '800',
+                boxShadow: '0 4px 12px rgba(17, 24, 39, 0.3)',
+              }}
+            >
+              Manage Customers
+            </Link>
+            <Link
+              href="/admin/bookings"
+              style={{
+                padding: '12px 24px',
+                background: '#2563eb',
+                color: 'white',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontWeight: '800',
+                boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
+              }}
+            >
+              Manage Bookings
+            </Link>
+          </div>
         </div>
       </div>
 

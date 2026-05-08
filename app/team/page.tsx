@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Footer from "../components/Footer";
 
 const teamMembers = [
@@ -42,7 +43,7 @@ export default function TeamPage() {
                         <h1 className="te-breadcrumb-title">Our Team</h1>
                         <ul className="te-breadcrumb-list">
                             <li>
-                                <a href="/">Home</a>
+                                <Link href="/">Home</Link>
                             </li>
                             <li className="active">Team</li>
                         </ul>
@@ -67,13 +68,13 @@ export default function TeamPage() {
                             <div className="col-md-6 col-lg-3" key={member.slug}>
                                 <div className="te-team-card">
                                     <div className="image">
-                                        <a href={`/team/${member.slug}`}>
+                                        <Link href={`/team/${member.slug}`}>
                                             <img src={member.image} alt={member.name} />
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="content text-center">
                                         <h3 className="title">
-                                            <a href={`/team/${member.slug}`}>{member.name}</a>
+                                            <Link href={`/team/${member.slug}`}>{member.name}</Link>
                                         </h3>
                                         <p className="sub-title">{member.role}</p>
                                     </div>

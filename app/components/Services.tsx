@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 const services = [
     {
         slug: "engine-diagnostics",
@@ -42,10 +44,10 @@ export default function Services() {
                     </div>
 
                     <div className="col-lg-4 text-lg-end">
-                        <a href="/services" className="te-theme-btn">
+                        <Link href="/services" className="te-theme-btn">
                             VIEW ALL SERVICES{" "}
                             <i className="fa-solid fa-arrow-right-long" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
 
@@ -70,7 +72,7 @@ export default function Services() {
                                         {/* Title */}
                                         <div className="te-title-wrapper">
                                             <h2 className="title">
-                                                <a href={`/services/${service.slug}`}>{service.title}</a>
+                                                <Link href={`/services/${service.slug}`}>{service.title}</Link>
                                             </h2>
                                         </div>
 
@@ -81,13 +83,13 @@ export default function Services() {
 
                                         {/* Read more */}
                                         <div className="te-read-more">
-                                            <a
+                                            <Link
                                                 href={`/services/${service.slug}`}
                                                 className="te-theme-btn"
                                             >
                                                 READ MORE{" "}
                                                 <i className="fa-solid fa-arrow-right-long" />
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Booking from '@/models/Booking';
 import { sendServiceCompleteNotification } from '@/lib/email';
+import { isAdminRequest, unauthorizedResponse } from '@/lib/admin-auth';
 
 // GET single booking
 export async function GET(
@@ -9,6 +10,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
+
     await connectDB();
     const { id } = await params;
     const booking = await Booking.findById(id);
@@ -35,6 +40,10 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
+
     await connectDB();
     const { id } = await params;
     const body = await request.json();
@@ -87,6 +96,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
+
     await connectDB();
     const { id } = await params;
     const booking = await Booking.findByIdAndDelete(id);

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Footer from "../../components/Footer";
 
 const members: Record<
@@ -86,9 +87,9 @@ export default function TeamMemberPage({
                 <h1>Team Member Not Found</h1>
                 <p>
                     The team member you are looking for does not exist. Go back to{" "}
-                    <a href="/team" style={{ textDecoration: "underline" }}>
+                    <Link href="/team" style={{ textDecoration: "underline" }}>
                         Team
-                    </a>
+                    </Link>
                     .
                 </p>
             </main>
@@ -109,10 +110,10 @@ export default function TeamMemberPage({
                         <h1 className="te-breadcrumb-title">Team Details</h1>
                         <ul className="te-breadcrumb-list">
                             <li>
-                                <a href="/">Home</a>
+                                <Link href="/">Home</Link>
                             </li>
                             <li>
-                                <a href="/team">Team</a>
+                                <Link href="/team">Team</Link>
                             </li>
                             <li className="active">{member.name}</li>
                         </ul>

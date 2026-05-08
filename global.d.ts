@@ -1,7 +1,7 @@
 declare global {
   var mongoose: {
-    conn: any;
-    promise: any;
+    conn: import('mongoose').Mongoose | null;
+    promise: Promise<import('mongoose').Mongoose> | null;
   };
 }
 

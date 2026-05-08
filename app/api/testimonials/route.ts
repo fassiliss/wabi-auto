@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Testimonial from '@/models/Testimonial';
+import { isAdminRequest, unauthorizedResponse } from '@/lib/admin-auth';
 
 // GET all testimonials
 export async function GET(request: NextRequest) {
@@ -9,6 +10,10 @@ export async function GET(request: NextRequest) {
     
     const { searchParams } = new URL(request.url);
     const admin = searchParams.get('admin');
+
+    if (admin === 'true' && !isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
     
     // If admin=true, return all testimonials, otherwise only published
     const query = admin === 'true' ? {} : { published: true };
@@ -27,6 +32,10 @@ export async function GET(request: NextRequest) {
 // POST create testimonial
 export async function POST(request: NextRequest) {
   try {
+    if (!isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
+
     await connectDB();
     const body = await request.json();
     

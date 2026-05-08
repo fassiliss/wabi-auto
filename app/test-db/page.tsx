@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 export default function TestDB() {
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);
 
   const testConnection = async () => {
@@ -59,7 +59,7 @@ export default function TestDB() {
         </button>
       </div>
       {loading && <p>Loading...</p>}
-      {result && (
+      {result !== null && (
         <pre style={{ 
           background: '#f5f5f5', 
           padding: '20px', 

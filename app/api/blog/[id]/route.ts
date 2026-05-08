@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
+import { isAdminRequest, unauthorizedResponse } from '@/lib/admin-auth';
 
 // GET single post
 export async function GET(
@@ -48,6 +49,10 @@ export async function PATCH(
       return NextResponse.json({ success: true, data: post });
     }
 
+    if (!isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
+
     // Regular update
     const post = await BlogPost.findByIdAndUpdate(
       id,
@@ -77,6 +82,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
+
     await connectDB();
     const { id } = await params;
     const post = await BlogPost.findByIdAndDelete(id);

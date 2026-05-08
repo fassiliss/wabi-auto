@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Footer() {
   return (
     <footer className="te-footer-area te-dark-bg">
@@ -27,12 +29,12 @@ export default function Footer() {
             <div className="te-footer-widget">
               <h3 className="te-footer-widget-title">Quick Links</h3>
               <ul className="te-footer-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/services">Our Services</a></li>
-                <li><a href="/blog">Blog</a></li>
-                <li><a href="/testimonials">Testimonials</a></li>
-                <li><a href="/contact">Contact</a></li>
+                <li><Link href="/">Home</Link></li>
+                <li><Link href="/about">About Us</Link></li>
+                <li><Link href="/services">Our Services</Link></li>
+                <li><Link href="/blog">Blog</Link></li>
+                <li><Link href="/testimonials">Testimonials</Link></li>
+                <li><Link href="/contact">Contact</Link></li>
               </ul>
             </div>
           </div>
@@ -42,11 +44,11 @@ export default function Footer() {
             <div className="te-footer-widget">
               <h3 className="te-footer-widget-title">Our Services</h3>
               <ul className="te-footer-links">
-                <li><a href="/services#engine-diagnostics">Engine Diagnostics</a></li>
-                <li><a href="/services#suspension-tuning">Suspension Tuning</a></li>
-                <li><a href="/services#transmission-service">Transmission Service</a></li>
-                <li><a href="/services#oil-change">Oil Change</a></li>
-                <li><a href="/services#brake-repair">Brake Repair</a></li>
+                <li><Link href="/services#engine-diagnostics">Engine Diagnostics</Link></li>
+                <li><Link href="/services#suspension-tuning">Suspension Tuning</Link></li>
+                <li><Link href="/services#transmission-service">Transmission Service</Link></li>
+                <li><Link href="/services#oil-change">Oil Change</Link></li>
+                <li><Link href="/services#brake-repair">Brake Repair</Link></li>
               </ul>
             </div>
           </div>

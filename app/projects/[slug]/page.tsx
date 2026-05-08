@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Footer from "../../components/Footer";
 
 // Project data
@@ -144,9 +145,9 @@ export default function ProjectDetailsPage({
                 <h1>Project Not Found</h1>
                 <p>
                     The project you are looking for does not exist. Please go back to{" "}
-                    <a href="/projects" style={{ textDecoration: "underline" }}>
+                    <Link href="/projects" style={{ textDecoration: "underline" }}>
                         Projects
-                    </a>
+                    </Link>
                     .
                 </p>
             </main>
@@ -169,10 +170,10 @@ export default function ProjectDetailsPage({
                         <h1 className="te-breadcrumb-title">Project Details</h1>
                         <ul className="te-breadcrumb-list">
                             <li>
-                                <a href="/">Home</a>
+                                <Link href="/">Home</Link>
                             </li>
                             <li>
-                                <a href="/projects">Projects</a>
+                                <Link href="/projects">Projects</Link>
                             </li>
                             <li className="active">{project.title}</li>
                         </ul>

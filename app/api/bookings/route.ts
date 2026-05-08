@@ -2,10 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Booking from '@/models/Booking';
 import { sendBookingConfirmation } from '@/lib/email';
+import { isAdminRequest, unauthorizedResponse } from '@/lib/admin-auth';
 
 // GET all bookings
 export async function GET(request: NextRequest) {
   try {
+    if (!isAdminRequest(request)) {
+      return unauthorizedResponse();
+    }
+
     await connectDB();
     
     const { searchParams } = new URL(request.url);

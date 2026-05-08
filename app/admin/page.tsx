@@ -8,15 +8,20 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Simple password check
-    if (password === 'admin123') {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+
+    if (res.ok) {
       localStorage.setItem('adminAuth', 'true');
-      router.push('/admin/dashboard');  // ✅ Fixed: redirect to dashboard
+      router.push('/admin/dashboard');
     } else {
       setError('Incorrect password');
       setLoading(false);
@@ -99,10 +104,6 @@ export default function AdminLogin() {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-
-          <p style={{ marginTop: '20px', fontSize: '13px', color: '#999', textAlign: 'center' }}>
-            Default password: admin123
-          </p>
         </form>
       </div>
     </div>

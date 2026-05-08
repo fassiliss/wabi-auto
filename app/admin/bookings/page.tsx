@@ -38,6 +38,11 @@ export default function AdminBookings() {
   const fetchBookings = async () => {
     try {
       const res = await fetch('/api/bookings');
+      if (res.status === 401) {
+        localStorage.removeItem('adminAuth');
+        router.push('/admin');
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setBookings(data.data);

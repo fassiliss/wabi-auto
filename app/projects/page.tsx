@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Footer from "../components/Footer";
 
 const projects = [
@@ -42,7 +43,7 @@ export default function ProjectsPage() {
                         <h1 className="te-breadcrumb-title">Our Projects</h1>
                         <ul className="te-breadcrumb-list">
                             <li>
-                                <a href="/">Home</a>
+                                <Link href="/">Home</Link>
                             </li>
                             <li className="active">Projects</li>
                         </ul>
@@ -67,25 +68,25 @@ export default function ProjectsPage() {
                             <div className="col-md-6 col-lg-3" key={project.slug}>
                                 <div className="te-portfolio-card">
                                     <div className="image">
-                                        <a href={`/projects/${project.slug}`}>
+                                        <Link href={`/projects/${project.slug}`}>
                                             <img src={project.image} alt={project.title} />
-                                        </a>
+                                        </Link>
                                         <span className="te-portfolio-category">
                       {project.category}
                     </span>
                                     </div>
                                     <div className="content">
                                         <h3 className="title">
-                                            <a href={`/projects/${project.slug}`}>
+                                            <Link href={`/projects/${project.slug}`}>
                                                 {project.title}
-                                            </a>
+                                            </Link>
                                         </h3>
-                                        <a
+                                        <Link
                                             href={`/projects/${project.slug}`}
                                             className="te-text-link"
                                         >
                                             VIEW DETAILS
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
