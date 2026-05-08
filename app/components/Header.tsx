@@ -19,7 +19,13 @@ export default function Header() {
             <div className="col-lg-6 col-md-6">
               <div className="header-contact">
                 <span><i className="fa-solid fa-phone"></i> (615) 582-3291</span>
-                <span><i className="fa-solid fa-location-dot"></i> 2401 Dickerson Pike, Nashville</span>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=2401%20Dickerson%20Pike%2C%20Nashville%2C%20TN"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fa-solid fa-location-dot"></i> 2401 Dickerson Pike, Nashville
+                </a>
               </div>
             </div>
             <div className="col-lg-6 col-md-6">
@@ -133,13 +139,17 @@ export default function Header() {
           text-transform: uppercase;
         }
 
-        .header-contact span {
+        .header-contact span,
+        .header-contact a {
           display: flex;
           align-items: center;
           gap: 6px;
+          color: inherit;
+          text-decoration: none;
         }
 
-        .header-contact i {
+        .header-contact i,
+        .header-contact a:hover {
           color: #ef4444;
         }
 
