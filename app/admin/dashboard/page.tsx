@@ -185,6 +185,20 @@ export default function AdminDashboard() {
             >
               Manage Bookings
             </Link>
+            <Link
+              href="/admin/chats"
+              style={{
+                padding: '12px 24px',
+                background: '#10b981',
+                color: 'white',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontWeight: '800',
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+              }}
+            >
+              Website Chats
+            </Link>
           </div>
         </div>
       </div>
