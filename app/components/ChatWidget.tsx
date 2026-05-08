@@ -32,6 +32,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const [sessionId, setSessionId] = useState('');
   const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -114,6 +115,7 @@ export default function ChatWidget() {
     }
 
     setSending(true);
+    setError('');
     setMessage('');
 
     try {
@@ -129,9 +131,14 @@ export default function ChatWidget() {
         setSessionId(data.data._id);
         setMessages([GREETING, ...data.data.messages]);
         hasLoadedSession.current = true;
+      } else {
+        setMessage(text);
+        setError(data.error || 'Message could not send. Please try again.');
       }
     } catch (error) {
       console.error('Chat send failed:', error);
+      setMessage(text);
+      setError('Message could not send. Check your connection or call us.');
       setMessages((current) => [
         ...current,
         { sender: 'admin', text: 'Message could not send. Please try again or call us.' },
@@ -205,6 +212,7 @@ export default function ChatWidget() {
           </div>
 
           <form className="chat-form" onSubmit={sendMessage}>
+            {error && <div className="chat-error">{error}</div>}
             <input
               aria-label="Chat message"
               placeholder="Type your message..."
@@ -369,9 +377,20 @@ export default function ChatWidget() {
 
         .chat-form {
           border-top: 1px solid #e5e7eb;
-          display: flex;
+          display: grid;
           gap: 8px;
+          grid-template-columns: 1fr auto;
           padding: 12px;
+        }
+
+        .chat-error {
+          background: #fef2f2;
+          border: 1px solid #fecaca;
+          border-radius: 8px;
+          color: #991b1b;
+          font-size: 12px;
+          grid-column: 1 / -1;
+          padding: 8px 10px;
         }
 
         .chat-form input {
