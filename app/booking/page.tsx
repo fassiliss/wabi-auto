@@ -20,6 +20,7 @@ export default function BookingPage() {
     notificationPreference: 'email',
   });
   const [loading, setLoading] = useState(false);
+  const [successEmail, setSuccessEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
@@ -55,6 +56,7 @@ export default function BookingPage() {
       const data = await res.json();
 
       if (data.success) {
+        setSuccessEmail(formData.email);
         setSuccess(true);
         setFormData({
           customerName: '',
@@ -155,7 +157,7 @@ export default function BookingPage() {
                     textAlign: 'center',
                   }}>
                     <strong>✓ Booking Confirmed!</strong>
-                    <p style={{ margin: '10px 0 0' }}>We&apos;ve sent a confirmation email to {formData.email}</p>
+                    <p style={{ margin: '10px 0 0' }}>We&apos;ve sent a confirmation email to {successEmail}</p>
                   </div>
                 )}
 

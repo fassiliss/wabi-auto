@@ -3,6 +3,7 @@ import connectDB from '@/lib/mongodb';
 import Booking from '@/models/Booking';
 import { sendBookingConfirmation } from '@/lib/email';
 import { isAdminRequest, unauthorizedResponse } from '@/lib/admin-auth';
+import { getErrorMessage } from '@/lib/errors';
 
 // GET all bookings
 export async function GET(request: NextRequest) {
@@ -47,8 +48,9 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ success: true, data: booking }, { status: 201 });
   } catch (error) {
+    console.error('Booking create failed:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create booking' },
+      { success: false, error: getErrorMessage(error) },
       { status: 500 }
     );
   }
