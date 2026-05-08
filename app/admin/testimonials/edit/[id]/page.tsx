@@ -88,7 +88,7 @@ export default function EditTestimonial() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', paddingTop: '140px' }}>
         <p>Loading...</p>
       </div>
     );
@@ -96,7 +96,7 @@ export default function EditTestimonial() {
 
   return (
     <div style={{ background: '#f3f4f6', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px', paddingBottom: '100px' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '160px 20px 100px' }}>
         <div style={{
           background: 'white',
           padding: '20px 30px',

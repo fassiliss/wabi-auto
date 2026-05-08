@@ -17,17 +17,28 @@ interface ServiceRequest {
 export default function AdminDashboard() {
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const router = useRouter();
 
   useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
     const isAuth = localStorage.getItem('adminAuth');
     if (!isAuth) {
       router.push('/admin');
-      return;
+      return () => observer.disconnect();
     }
     fetchRequests();
+
+    return () => observer.disconnect();
   }, []);
 
   const fetchRequests = async () => {
@@ -102,6 +113,16 @@ export default function AdminDashboard() {
     scheduled: '#a78bfa',
     completed: '#34d399',
   };
+
+  const pageBg = isDark ? '#0a0f1a' : '#f3f4f6';
+  const panelBg = isDark ? '#111827' : '#ffffff';
+  const panelBorder = isDark ? '1px solid #243041' : '1px solid #e5e7eb';
+  const headingColor = isDark ? '#f9fafb' : '#111827';
+  const textColor = isDark ? '#e5e7eb' : '#374151';
+  const mutedColor = isDark ? '#9ca3af' : '#6b7280';
+  const tableHeaderBg = isDark ? '#172033' : '#f9fafb';
+  const rowBorder = isDark ? '#253244' : '#e5e7eb';
+  const inputBg = isDark ? '#0b1220' : '#ffffff';
 
   if (loading) {
     return (
@@ -204,31 +225,32 @@ export default function AdminDashboard() {
       </div>
 
       {/* Main Content */}
-      <div style={{ minHeight: '100vh', background: '#f3f4f6', padding: '40px 20px' }}>
+      <div style={{ minHeight: '100vh', background: pageBg, padding: '40px 20px' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           {/* Stats */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '20px' }}>
-            <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-              <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>Total Requests</p>
-              <h2 style={{ margin: '5px 0 0', color: '#333' }}>{requests.length}</h2>
+            <div style={{ background: panelBg, border: panelBorder, padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+              <p style={{ margin: 0, color: mutedColor, fontSize: '14px' }}>Total Requests</p>
+              <h2 style={{ margin: '5px 0 0', color: headingColor }}>{requests.length}</h2>
             </div>
-            <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-              <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>Pending</p>
+            <div style={{ background: panelBg, border: panelBorder, padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+              <p style={{ margin: 0, color: mutedColor, fontSize: '14px' }}>Pending</p>
               <h2 style={{ margin: '5px 0 0', color: statusColors.pending }}>{requests.filter(r => r.status === 'pending').length}</h2>
             </div>
-            <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-              <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>Scheduled</p>
+            <div style={{ background: panelBg, border: panelBorder, padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+              <p style={{ margin: 0, color: mutedColor, fontSize: '14px' }}>Scheduled</p>
               <h2 style={{ margin: '5px 0 0', color: statusColors.scheduled }}>{requests.filter(r => r.status === 'scheduled').length}</h2>
             </div>
-            <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-              <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>Completed</p>
+            <div style={{ background: panelBg, border: panelBorder, padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+              <p style={{ margin: 0, color: mutedColor, fontSize: '14px' }}>Completed</p>
               <h2 style={{ margin: '5px 0 0', color: statusColors.completed }}>{requests.filter(r => r.status === 'completed').length}</h2>
             </div>
           </div>
 
           {/* Filters */}
           <div style={{
-            background: 'white',
+            background: panelBg,
+            border: panelBorder,
             padding: '20px',
             borderRadius: '12px',
             marginBottom: '20px',
@@ -247,6 +269,8 @@ export default function AdminDashboard() {
                   border: '1px solid #ddd',
                   borderRadius: '8px',
                   fontSize: '15px',
+                  background: inputBg,
+                  color: textColor,
                 }}
               />
               <select
@@ -254,10 +278,12 @@ export default function AdminDashboard() {
                 onChange={(e) => setFilterStatus(e.target.value)}
                 style={{
                   padding: '12px 16px',
-                  border: '1px solid #ddd',
+                  border: `1px solid ${isDark ? '#374151' : '#ddd'}`,
                   borderRadius: '8px',
                   fontSize: '15px',
                   cursor: 'pointer',
+                  background: inputBg,
+                  color: textColor,
                 }}
               >
                 <option value="all">All Status</option>
@@ -271,42 +297,43 @@ export default function AdminDashboard() {
 
           {/* Requests Table */}
           <div style={{
-            background: 'white',
+            background: panelBg,
+            border: panelBorder,
             borderRadius: '12px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
             overflow: 'hidden',
           }}>
             {filteredRequests.length === 0 ? (
-              <div style={{ padding: '60px 20px', textAlign: 'center', color: '#999' }}>
+              <div style={{ padding: '60px 20px', textAlign: 'center', color: mutedColor }}>
                 <p>No service requests found</p>
               </div>
             ) : (
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
-                    <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
-                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Date</th>
-                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Name</th>
-                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Contact</th>
-                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Service</th>
-                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Message</th>
-                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Status</th>
-                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Actions</th>
+                    <tr style={{ background: tableHeaderBg, borderBottom: `2px solid ${rowBorder}` }}>
+                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: textColor }}>Date</th>
+                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: textColor }}>Name</th>
+                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: textColor }}>Contact</th>
+                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: textColor }}>Service</th>
+                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: textColor }}>Message</th>
+                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: textColor }}>Status</th>
+                      <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600', color: textColor }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredRequests.map((req) => (
-                      <tr key={req._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                        <td style={{ padding: '15px', color: '#6b7280' }}>
+                      <tr key={req._id} style={{ borderBottom: `1px solid ${rowBorder}` }}>
+                        <td style={{ padding: '15px', color: mutedColor }}>
                           {new Date(req.createdAt).toLocaleDateString()}
                         </td>
-                        <td style={{ padding: '15px', color: '#111827', fontWeight: '500' }}>{req.name}</td>
-                        <td style={{ padding: '15px', color: '#6b7280', fontSize: '14px' }}>
+                        <td style={{ padding: '15px', color: headingColor, fontWeight: '500' }}>{req.name}</td>
+                        <td style={{ padding: '15px', color: mutedColor, fontSize: '14px' }}>
                           <div>{req.email}</div>
                           <div>{req.phone}</div>
                         </td>
-                        <td style={{ padding: '15px', color: '#111827' }}>{req.service}</td>
-                        <td style={{ padding: '15px', color: '#6b7280', fontSize: '14px', maxWidth: '200px' }}>
+                        <td style={{ padding: '15px', color: headingColor }}>{req.service}</td>
+                        <td style={{ padding: '15px', color: mutedColor, fontSize: '14px', maxWidth: '200px' }}>
                           {req.message || 'No message'}
                         </td>
                         <td style={{ padding: '15px' }}>

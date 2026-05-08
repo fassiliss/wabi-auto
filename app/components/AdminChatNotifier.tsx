@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type ChatMessage = {
   _id?: string;
@@ -16,16 +16,12 @@ type ChatSession = {
   messages: ChatMessage[];
 };
 
-function getMessageKey(sessionId: string, message: ChatMessage) {
-  return message._id || `${sessionId}-${message.createdAt}-${message.text}`;
-}
+const LAST_OPENED_CHATS_KEY = 'wabiAdminLastOpenedChats';
 
 export default function AdminChatNotifier() {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith('/admin');
   const [unreadCount, setUnreadCount] = useState(0);
-  const seenVisitorMessages = useRef(new Set<string>());
-  const hasLoaded = useRef(false);
 
   useEffect(() => {
     if (!isAdminPage) {
@@ -44,28 +40,23 @@ export default function AdminChatNotifier() {
           return;
         }
 
-        let newMessages = 0;
+        const lastOpenedChats = Number(localStorage.getItem(LAST_OPENED_CHATS_KEY) || '0');
+        let unreadMessages = 0;
+
         for (const session of data.data as ChatSession[]) {
           for (const message of session.messages) {
             if (message.sender !== 'visitor') {
               continue;
             }
 
-            const key = getMessageKey(session._id, message);
-            if (!seenVisitorMessages.current.has(key)) {
-              if (hasLoaded.current) {
-                newMessages += 1;
-              }
-              seenVisitorMessages.current.add(key);
+            const messageTime = message.createdAt ? new Date(message.createdAt).getTime() : 0;
+            if (!lastOpenedChats || messageTime > lastOpenedChats) {
+              unreadMessages += 1;
             }
           }
         }
 
-        if (newMessages > 0) {
-          setUnreadCount((count) => count + newMessages);
-        }
-
-        hasLoaded.current = true;
+        setUnreadCount(unreadMessages);
       } catch (error) {
         console.error('Admin chat notification failed:', error);
       }
@@ -79,6 +70,7 @@ export default function AdminChatNotifier() {
 
   useEffect(() => {
     if (pathname === '/admin/chats') {
+      localStorage.setItem(LAST_OPENED_CHATS_KEY, String(Date.now()));
       setUnreadCount(0);
     }
   }, [pathname]);
@@ -88,7 +80,14 @@ export default function AdminChatNotifier() {
   }
 
   return (
-    <Link className="admin-chat-notifier" href="/admin/chats" onClick={() => setUnreadCount(0)}>
+    <Link
+      className="admin-chat-notifier"
+      href="/admin/chats"
+      onClick={() => {
+        localStorage.setItem(LAST_OPENED_CHATS_KEY, String(Date.now()));
+        setUnreadCount(0);
+      }}
+    >
       <i className="fa-solid fa-comments"></i>
       Chats
       {unreadCount > 0 && (
@@ -102,7 +101,7 @@ export default function AdminChatNotifier() {
           align-items: center;
           background: #ef4444;
           border-radius: 999px;
-          bottom: 22px;
+          bottom: 32px;
           box-shadow: 0 14px 30px rgba(239, 68, 68, 0.34);
           color: #ffffff;
           display: inline-flex;
@@ -138,7 +137,7 @@ export default function AdminChatNotifier() {
 
         @media (max-width: 575px) {
           .admin-chat-notifier {
-            bottom: 16px;
+            bottom: 22px;
             right: 16px;
           }
         }

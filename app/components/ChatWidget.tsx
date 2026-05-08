@@ -158,6 +158,7 @@ export default function ChatWidget() {
     }
 
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(`${LAST_SEEN_ADMIN_KEY}:${sessionId}`);
     setSessionId('');
     setMessages([GREETING]);
     setUnreadAdminReplies(0);

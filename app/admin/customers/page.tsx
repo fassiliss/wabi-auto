@@ -39,6 +39,7 @@ const sourceLabels = {
 
 export default function AdminCustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [isDark, setIsDark] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -47,10 +48,18 @@ export default function AdminCustomersPage() {
   const router = useRouter();
 
   useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
     const isAuth = localStorage.getItem('adminAuth');
     if (!isAuth) {
       router.push('/admin');
-      return;
+      return () => observer.disconnect();
     }
 
     const fetchCustomers = async () => {
@@ -77,6 +86,8 @@ export default function AdminCustomersPage() {
     };
 
     fetchCustomers();
+
+    return () => observer.disconnect();
   }, [router]);
 
   const filteredCustomers = customers.filter((customer) => {
@@ -96,6 +107,7 @@ export default function AdminCustomersPage() {
   const customersWithRequests = customers.filter((customer) => customer.totalRequests > 0).length;
   const selectedCustomer =
     customers.find((customer) => customer.id === selectedCustomerId) || filteredCustomers[0];
+  const theme = getTheme(isDark);
 
   if (loading) {
     return (
@@ -106,10 +118,11 @@ export default function AdminCustomersPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f3f4f6', padding: '160px 20px 40px' }}>
+    <div style={{ minHeight: '100vh', background: theme.pageBg, padding: '160px 20px 40px' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <div style={{
-          background: 'white',
+          background: theme.panelBg,
+          border: theme.panelBorder,
           padding: '24px 30px',
           borderRadius: '12px',
           marginBottom: '20px',
@@ -121,8 +134,8 @@ export default function AdminCustomersPage() {
           boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
           <div>
-            <h1 style={{ margin: 0, color: '#111827', fontWeight: 900 }}>Customer Management</h1>
-            <p style={{ margin: '6px 0 0', color: '#6b7280' }}>
+            <h1 style={{ margin: 0, color: theme.headingColor, fontWeight: 900 }}>Customer Management</h1>
+            <p style={{ margin: '6px 0 0', color: theme.mutedColor }}>
               View customers from bookings and service requests in one place.
             </p>
           </div>
@@ -137,14 +150,15 @@ export default function AdminCustomersPage() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '20px' }}>
-          <StatCard label="Total Customers" value={customers.length} color="#111827" />
-          <StatCard label="With Bookings" value={customersWithBookings} color="#2563eb" />
-          <StatCard label="With Requests" value={customersWithRequests} color="#f59e0b" />
-          <StatCard label="Visible Now" value={filteredCustomers.length} color="#10b981" />
+          <StatCard label="Total Customers" value={customers.length} color={theme.headingColor} theme={theme} />
+          <StatCard label="With Bookings" value={customersWithBookings} color="#2563eb" theme={theme} />
+          <StatCard label="With Requests" value={customersWithRequests} color="#f59e0b" theme={theme} />
+          <StatCard label="Visible Now" value={filteredCustomers.length} color="#10b981" theme={theme} />
         </div>
 
         <div style={{
-          background: 'white',
+          background: theme.panelBg,
+          border: theme.panelBorder,
           padding: '20px',
           borderRadius: '12px',
           marginBottom: '20px',
@@ -163,6 +177,8 @@ export default function AdminCustomersPage() {
                 border: '1px solid #d1d5db',
                 borderRadius: '8px',
                 fontSize: '15px',
+                background: theme.inputBg,
+                color: theme.textColor,
               }}
             />
             <select
@@ -174,6 +190,8 @@ export default function AdminCustomersPage() {
                 borderRadius: '8px',
                 fontSize: '15px',
                 cursor: 'pointer',
+                background: theme.inputBg,
+                color: theme.textColor,
               }}
             >
               <option value="all">All Customers</option>
@@ -184,57 +202,58 @@ export default function AdminCustomersPage() {
         </div>
 
         <div style={{
-          background: 'white',
+          background: theme.panelBg,
+          border: theme.panelBorder,
           borderRadius: '12px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
           overflow: 'hidden',
           marginBottom: '20px',
         }}>
           {error ? (
-            <div style={{ padding: '60px 20px', textAlign: 'center', color: '#6b7280' }}>
-              <h3 style={{ margin: '0 0 10px', color: '#111827' }}>Customers could not load</h3>
+            <div style={{ padding: '60px 20px', textAlign: 'center', color: theme.mutedColor }}>
+              <h3 style={{ margin: '0 0 10px', color: theme.headingColor }}>Customers could not load</h3>
               <p style={{ margin: 0 }}>{error}</p>
             </div>
           ) : filteredCustomers.length === 0 ? (
-            <div style={{ padding: '60px 20px', textAlign: 'center', color: '#6b7280' }}>
+            <div style={{ padding: '60px 20px', textAlign: 'center', color: theme.mutedColor }}>
               <p>No customers found</p>
             </div>
           ) : (
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Last Service</TableHead>
-                    <TableHead>Activity</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
+                  <tr style={{ background: theme.tableHeaderBg, borderBottom: `2px solid ${theme.rowBorder}` }}>
+                    <TableHead theme={theme}>Customer</TableHead>
+                    <TableHead theme={theme}>Contact</TableHead>
+                    <TableHead theme={theme}>Last Service</TableHead>
+                    <TableHead theme={theme}>Activity</TableHead>
+                    <TableHead theme={theme}>Status</TableHead>
+                    <TableHead theme={theme}>Actions</TableHead>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredCustomers.map((customer) => (
-                    <tr key={`${customer.email}-${customer.phone}`} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                      <td style={cellStyle}>
-                        <div style={{ color: '#111827', fontWeight: 800 }}>{customer.name}</div>
-                        <div style={{ color: '#6b7280', fontSize: '13px' }}>
+                    <tr key={`${customer.email}-${customer.phone}`} style={{ borderBottom: `1px solid ${theme.rowBorder}` }}>
+                      <td style={cellStyle(theme)}>
+                        <div style={{ color: theme.headingColor, fontWeight: 800 }}>{customer.name}</div>
+                        <div style={{ color: theme.mutedColor, fontSize: '13px' }}>
                           {sourceLabels[customer.source]} customer
                         </div>
                       </td>
-                      <td style={cellStyle}>
-                        <div style={{ color: '#374151' }}>{customer.email}</div>
-                        <div style={{ color: '#6b7280', fontSize: '13px' }}>{customer.phone}</div>
+                      <td style={cellStyle(theme)}>
+                        <div style={{ color: theme.textColor }}>{customer.email}</div>
+                        <div style={{ color: theme.mutedColor, fontSize: '13px' }}>{customer.phone}</div>
                       </td>
-                      <td style={cellStyle}>
-                        <div style={{ color: '#111827', fontWeight: 600 }}>{customer.lastService}</div>
-                        <div style={{ color: '#6b7280', fontSize: '13px' }}>
+                      <td style={cellStyle(theme)}>
+                        <div style={{ color: theme.headingColor, fontWeight: 600 }}>{customer.lastService}</div>
+                        <div style={{ color: theme.mutedColor, fontSize: '13px' }}>
                           {customer.totalBookings} booking{customer.totalBookings === 1 ? '' : 's'} · {customer.totalRequests} request{customer.totalRequests === 1 ? '' : 's'}
                         </div>
                       </td>
-                      <td style={cellStyle}>
+                      <td style={cellStyle(theme)}>
                         {new Date(customer.lastActivity).toLocaleDateString()}
                       </td>
-                      <td style={cellStyle}>
+                      <td style={cellStyle(theme)}>
                         <span style={{
                           display: 'inline-flex',
                           padding: '6px 10px',
@@ -248,7 +267,7 @@ export default function AdminCustomersPage() {
                           {customer.status}
                         </span>
                       </td>
-                      <td style={cellStyle}>
+                      <td style={cellStyle(theme)}>
                         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                           <button
                             type="button"
@@ -279,15 +298,16 @@ export default function AdminCustomersPage() {
 
         {selectedCustomer && !error && (
           <div style={{
-            background: 'white',
+            background: theme.panelBg,
+            border: theme.panelBorder,
             borderRadius: '12px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
             padding: '24px',
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '18px' }}>
               <div>
-                <h2 style={{ margin: 0, color: '#111827', fontWeight: 900 }}>{selectedCustomer.name}</h2>
-                <p style={{ margin: '6px 0 0', color: '#6b7280' }}>
+                <h2 style={{ margin: 0, color: theme.headingColor, fontWeight: 900 }}>{selectedCustomer.name}</h2>
+                <p style={{ margin: '6px 0 0', color: theme.mutedColor }}>
                   {selectedCustomer.email} · {selectedCustomer.phone}
                 </p>
               </div>
@@ -307,6 +327,7 @@ export default function AdminCustomersPage() {
                   status: booking.status,
                 }))}
                 title="Booking History"
+                theme={theme}
               />
               <HistoryList
                 emptyText="No service requests yet"
@@ -316,6 +337,7 @@ export default function AdminCustomersPage() {
                   status: request.status,
                 }))}
                 title="Request History"
+                theme={theme}
               />
             </div>
           </div>
@@ -336,29 +358,31 @@ function formatDate(value?: string) {
 function HistoryList({
   emptyText,
   items,
+  theme,
   title,
 }: {
   emptyText: string;
   items: Array<{ href?: string; label: string; meta: string; status: string }>;
+  theme: AdminTheme;
   title: string;
 }) {
   return (
-    <div style={{ border: '1px solid #e5e7eb', borderRadius: '10px', overflow: 'hidden' }}>
-      <h3 style={{ margin: 0, padding: '14px 16px', background: '#f9fafb', color: '#111827', fontSize: '16px' }}>
+    <div style={{ border: theme.panelBorder, borderRadius: '10px', overflow: 'hidden' }}>
+      <h3 style={{ margin: 0, padding: '14px 16px', background: theme.tableHeaderBg, color: theme.headingColor, fontSize: '16px' }}>
         {title}
       </h3>
       {items.length === 0 ? (
-        <p style={{ margin: 0, padding: '16px', color: '#6b7280' }}>{emptyText}</p>
+        <p style={{ margin: 0, padding: '16px', color: theme.mutedColor }}>{emptyText}</p>
       ) : (
         <div>
           {items.map((item) => (
-            <div key={`${item.label}-${item.meta}`} style={{ padding: '14px 16px', borderTop: '1px solid #e5e7eb' }}>
+            <div key={`${item.label}-${item.meta}`} style={{ padding: '14px 16px', borderTop: `1px solid ${theme.rowBorder}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', alignItems: 'center' }}>
                 <div>
-                  <div style={{ color: '#111827', fontWeight: 800 }}>
-                    {item.href ? <Link href={item.href} style={{ color: '#111827', textDecoration: 'none' }}>{item.label}</Link> : item.label}
+                  <div style={{ color: theme.headingColor, fontWeight: 800 }}>
+                    {item.href ? <Link href={item.href} style={{ color: theme.headingColor, textDecoration: 'none' }}>{item.label}</Link> : item.label}
                   </div>
-                  <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '4px' }}>{item.meta}</div>
+                  <div style={{ color: theme.mutedColor, fontSize: '13px', marginTop: '4px' }}>{item.meta}</div>
                 </div>
                 <span style={{
                   background: '#eef2ff',
@@ -381,29 +405,47 @@ function HistoryList({
   );
 }
 
-function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
+function StatCard({ label, value, color, theme }: { label: string; value: number; color: string; theme: AdminTheme }) {
   return (
-    <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-      <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>{label}</p>
+    <div style={{ background: theme.panelBg, border: theme.panelBorder, padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+      <p style={{ margin: 0, color: theme.mutedColor, fontSize: '14px' }}>{label}</p>
       <h2 style={{ margin: '5px 0 0', color }}>{value}</h2>
     </div>
   );
 }
 
-function TableHead({ children }: { children: React.ReactNode }) {
+function TableHead({ children, theme }: { children: React.ReactNode; theme: AdminTheme }) {
   return (
-    <th style={{ padding: '15px', textAlign: 'left', fontWeight: 800, color: '#374151' }}>
+    <th style={{ padding: '15px', textAlign: 'left', fontWeight: 800, color: theme.textColor }}>
       {children}
     </th>
   );
 }
 
-const cellStyle = {
-  padding: '15px',
-  color: '#6b7280',
-  fontSize: '14px',
-  verticalAlign: 'top',
-} as const;
+type AdminTheme = ReturnType<typeof getTheme>;
+
+function getTheme(isDark: boolean) {
+  return {
+    headingColor: isDark ? '#f9fafb' : '#111827',
+    inputBg: isDark ? '#0b1220' : '#ffffff',
+    mutedColor: isDark ? '#9ca3af' : '#6b7280',
+    pageBg: isDark ? '#0a0f1a' : '#f3f4f6',
+    panelBg: isDark ? '#111827' : '#ffffff',
+    panelBorder: isDark ? '1px solid #243041' : '1px solid #e5e7eb',
+    rowBorder: isDark ? '#253244' : '#e5e7eb',
+    tableHeaderBg: isDark ? '#172033' : '#f9fafb',
+    textColor: isDark ? '#e5e7eb' : '#374151',
+  };
+}
+
+function cellStyle(theme: AdminTheme) {
+  return {
+    padding: '15px',
+    color: theme.mutedColor,
+    fontSize: '14px',
+    verticalAlign: 'top',
+  } as const;
+}
 
 function buttonStyle(background: string) {
   return {

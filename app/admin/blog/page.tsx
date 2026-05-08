@@ -83,14 +83,14 @@ export default function AdminBlog() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', paddingTop: '140px' }}>
         <p>Loading...</p>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f3f4f6', padding: '20px' }}>
+    <div style={{ minHeight: '100vh', background: '#f3f4f6', padding: '160px 20px 40px' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{
