@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import connectDB from '@/lib/mongodb';
 import ChatSession from '@/models/ChatSession';
 
@@ -14,6 +15,10 @@ export async function GET(request: NextRequest) {
     const sessionId = searchParams.get('sessionId');
 
     if (!sessionId) {
+      return NextResponse.json({ success: true, data: null });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
       return NextResponse.json({ success: true, data: null });
     }
 
@@ -46,7 +51,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let session = body?.sessionId ? await ChatSession.findById(body.sessionId) : null;
+    const savedSessionId = typeof body?.sessionId === 'string' ? body.sessionId : '';
+    let session = savedSessionId && mongoose.Types.ObjectId.isValid(savedSessionId)
+      ? await ChatSession.findById(savedSessionId)
+      : null;
     const now = new Date();
 
     if (!session) {
@@ -79,7 +87,7 @@ export async function DELETE(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get('sessionId');
 
-    if (sessionId) {
+    if (sessionId && mongoose.Types.ObjectId.isValid(sessionId)) {
       await ChatSession.findByIdAndUpdate(sessionId, {
         status: 'closed',
         updatedAt: new Date(),
